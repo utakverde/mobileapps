@@ -1,0 +1,186 @@
+UTILITY AGENTS AND SKILLS MATRIX
+
+Purpose
+- Map each utility work area to the most useful skills and agents.
+- Help choose the right workflow quickly for analysis, implementation, testing, and release.
+
+Core Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Core Agents
+- repository_analyzer
+- solution_architect
+- integration_tester
+- security_reviewer
+- release_engineer
+
+Module-to-Workflow Matrix
+
+1. Desktop Inventory and Parity
+- Skills
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+- Agents
+  - repository_analyzer
+  - solution_architect
+- Use for
+  - screen inventory
+  - module mapping
+  - field tracing
+  - desktop-to-web parity analysis
+
+2. Billing and Adjustments
+- Skills
+  - $shared-contract-governance
+  - $mysql55-safety
+- Agents
+  - solution_architect
+  - integration_tester
+- Use for
+  - bill creation
+  - bill update
+  - bill adjustment
+  - preview SQL
+  - rollback SQL
+  - transaction IDs
+
+3. Collections and Receipts
+- Skills
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+- Agents
+  - repository_analyzer
+  - integration_tester
+- Use for
+  - payment posting
+  - OR duplicate prevention
+  - aging impact
+  - receivables
+  - accounting-ready summaries
+
+4. Rates and Scheduling
+- Skills
+  - $shared-contract-governance
+  - $mysql55-safety
+- Agents
+  - solution_architect
+  - repository_analyzer
+- Use for
+  - rate setup
+  - ERC and tax rates
+  - reading schedule
+  - billing cycle schedule
+  - due/disconnection dates
+
+5. Disconnection and Reconnection
+- Skills
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+- Agents
+  - repository_analyzer
+  - integration_tester
+  - security_reviewer
+- Use for
+  - disconnection posting
+  - reconnection posting
+  - audit trail
+  - duplicate prevention
+  - monthly operational reporting
+
+6. Reports and Analytics
+- Skills
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+- Agents
+  - solution_architect
+  - integration_tester
+- Use for
+  - sales reports
+  - aging
+  - unpaid bills
+  - financial analysis
+  - variance analysis
+  - system map summaries
+  - complaints summaries
+
+7. Mobile Sync
+- Skills
+  - $cross-platform-sync
+  - $shared-contract-governance
+  - $mysql55-safety
+- Agents
+  - solution_architect
+  - integration_tester
+  - security_reviewer
+- Use for
+  - offline queue
+  - idempotent upload
+  - conflict handling
+  - duplicate prevention
+  - reference-data sync
+  - reconciliation
+
+8. Complaints and System Map
+- Skills
+  - $multi-platform-team-workflow
+  - $cross-platform-sync
+- Agents
+  - repository_analyzer
+  - solution_architect
+- Use for
+  - complaint tickets
+  - assignment workflow
+  - resolution history
+  - map references
+  - route and area visualization
+
+9. Accounting Integration
+- Skills
+  - $shared-contract-governance
+  - $mysql55-safety
+- Agents
+  - solution_architect
+  - security_reviewer
+  - release_engineer
+- Use for
+  - export mapping
+  - journal candidates
+  - CSV/API posting
+  - reversal handling
+  - accounting reconciliation
+
+10. Release and Hardening
+- Skills
+  - $multi-platform-team-workflow
+  - $mysql55-safety
+- Agents
+  - integration_tester
+  - security_reviewer
+  - release_engineer
+- Use for
+  - regression testing
+  - security checks
+  - deployment planning
+  - rollback readiness
+
+How To Use This Matrix
+- Start with repository_analyzer when you need to understand the current desktop behavior.
+- Move to solution_architect when you need shared contracts or workflow design.
+- Bring in integration_tester when parity or reconciliation must be proven.
+- Bring in security_reviewer before anything that writes data, syncs data, or exports accounting entries.
+- Bring in release_engineer once the feature is ready for rollout.
+
+Default Workflow
+1. repository_analyzer
+2. solution_architect
+3. integration_tester
+4. security_reviewer
+5. release_engineer
+
+Exception Rule
+- If the work is mainly about offline/mobile synchronization, start with solution_architect and integration_tester after repository_analyzer.
+- If the work is mainly about release readiness, start with security_reviewer and release_engineer after the analysis step.
+

@@ -1,0 +1,106 @@
+UTILITY MASTER PROMPT
+
+Use this prompt when starting any new utility conversion, analysis, or implementation task.
+
+Required Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Required Agent Sequence
+1. repository_analyzer
+2. solution_architect
+3. integration_tester
+4. security_reviewer
+5. release_engineer
+
+Read First
+1. utility_master_harmony_plan.txt
+2. utility_plans_index.txt
+3. utility_module_inventory.txt
+4. utility_web_conversion_master_plan.txt
+5. utility_mobile_sync_plan.txt
+6. utility_phase_1_prompt.txt
+
+Primary Instruction
+- Treat the desktop utility system as the source of truth.
+- Preserve all existing billing calculations and operational behavior.
+- Convert the full utility platform to web in a way that keeps all modules, workflows, and reports in harmony.
+- BAPA is one account family inside the full platform, not the whole platform.
+- The Android mobile app is a first-class peer platform and must sync with the web and desktop systems.
+
+Hard Rules
+- Do not change billing math unless the desktop logic proves it is wrong and the correction is explicitly validated.
+- Do not invent new accounting behavior.
+- Do not post duplicate financial or sync transactions.
+- Every write action must support:
+  - preview SQL
+  - rollback SQL
+  - stable transaction identifiers
+  - audit history
+  - reconciliation
+  - idempotent retry
+- Keep MySQL 5.5 compatibility.
+
+What To Analyze
+- Login and mode selection
+- Member services
+- Billing section
+- Finance section
+- Teller section
+- Data transfer
+- Reports center
+- Configuration
+- Financial analysis
+- System map integration
+- Complaints workflow
+- Accounting integration
+- Mobile offline sync
+
+What To Return
+- module inventory
+- data contract map
+- desktop-to-web mapping
+- special account-family differences
+- risky or ambiguous field names
+- preview/rollback needs
+- sync and duplicate prevention rules
+- reconciliation checkpoints
+- accounting export candidates
+- mobile sync checkpoints
+- phase 1 implementation prompt
+
+Implementation Priority
+1. shared contracts and terminology
+2. module inventory and mapping
+3. read-only parity reports
+4. write workflows with preview/rollback
+5. sync and duplicate prevention
+6. reconciliation and audit
+7. financial analysis
+8. complaints and system map
+9. accounting integration
+10. mobile sync
+11. regression testing and release planning
+
+Prompt Template
+Use $multi-platform-team-workflow, $shared-contract-governance,
+$cross-platform-sync, and $mysql55-safety.
+
+Analyze the desktop utility system and convert it into a harmonious web-based
+platform. Start by reading the master harmony plan and module inventory. Then
+produce:
+- module-by-module desktop-to-web mapping
+- shared data contract recommendations
+- special account-family rules
+- preview/rollback strategy for all write actions
+- sync and duplicate-prevention strategy
+- audit and reconciliation strategy
+- accounting integration approach
+- mobile offline-first synchronization approach
+
+If the task is BAPA-specific, treat BAPA as one branch of the full utility
+platform and keep it consistent with the shared core. If the task touches
+mobile, treat Android as a peer client that shares the same contracts and
+reconciliation rules as web and desktop.

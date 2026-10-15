@@ -1,0 +1,211 @@
+UTILITY MOBILE SYNC PLAN
+
+Purpose
+- Make the web platform, desktop utility, and Android mobile app synchronize as one coordinated system.
+- Preserve offline-first behavior on mobile while keeping the web and desktop data contracts aligned.
+- Support billing, collections, disconnection, reconnection, complaints, and reference data sync.
+
+Non-Negotiable Rules
+- Mobile sync must not change billing calculations.
+- Mobile offline records must remain usable until synced.
+- Every sync transaction must be idempotent.
+- Duplicate uploads must be blocked.
+- Every synced write must keep:
+  - stable transaction ID
+  - source system identifier
+  - before image
+  - after image
+  - audit trail
+  - reconciliation status
+- Preserve SQLite on mobile and MySQL 5.5 on the server side.
+
+Primary Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Recommended Agent Roles
+- repository_analyzer
+  - Identify the mobile tables, queues, and sync fields.
+- solution_architect
+  - Define the sync topology and conflict rules across desktop, web, and mobile.
+- integration_tester
+  - Test offline creation, retry, duplicate prevention, and reconciliation.
+- security_reviewer
+  - Review sync tokens, auth, logging, and sensitive data handling.
+- release_engineer
+  - Plan sync rollout, schema migrations, and fallback behavior.
+
+Mobile Roles In The Platform
+- Offline meter reading capture
+- Offline bill review and collection capture
+- Offline disconnection and complaint handling
+- Route and field operation support
+- Local print and preview support where needed
+
+Sync Topology
+- Desktop
+  - operational and reporting utility
+  - can export/import batches
+  - can reconcile with web and mobile
+- Web
+  - central coordination layer
+  - receives sync from mobile
+  - exposes reports, approvals, and audit
+- Mobile
+  - offline-first field client
+  - stores pending changes locally
+  - uploads when network is available
+
+Shared Sync Contracts
+- Reading
+- Bill
+- Collection
+- Disconnection
+- Reconnection
+- Complaint
+- Consumer reference
+- Route / area / book reference
+- Schedule reference
+- Audit entry
+- Sync queue entry
+
+Required Sync Fields
+- transaction_id
+- source_system
+- device_id
+- user_id
+- account_number
+- bill_month
+- operation_type
+- record_type
+- status
+- created_at
+- updated_at
+- synced_at
+- sync_attempts
+- before_image
+- after_image
+- rollback_payload
+
+Sync Flows
+
+1. Mobile to Web
+- Mobile creates offline record.
+- Mobile stores a stable transaction ID.
+- Mobile queues the record.
+- Web accepts the batch only once.
+- Web returns posted or duplicate status.
+- Web stores audit and reconciliation records.
+
+2. Web to Mobile
+- Web sends updated master data, schedules, rates, routes, and approved reference tables.
+- Mobile applies updates locally.
+- Mobile keeps a version history for conflict detection.
+
+3. Desktop to Web / Mobile
+- Desktop exports reference and reconciliation data.
+- Mobile can import only what it needs for field work.
+- Web remains the central reporting and approval layer.
+
+Duplicate Prevention
+- Use a unique key built from:
+  - source_system
+  - device_id
+  - transaction_id
+  - account_number
+  - bill_month
+  - record_type
+  - operation_type
+- Reject repeated uploads with the same key.
+- Do not generate a new row for retry traffic.
+
+Conflict Handling
+- If mobile and web both changed the same logical record:
+  - keep the latest approved server-side version as the canonical result
+  - preserve the mobile before-image for audit
+  - mark the conflict for reconciliation
+- Do not silently overwrite financial postings.
+
+Reconciliation
+- Match mobile uploads against web postings and desktop summaries.
+- Reconcile:
+  - bill counts
+  - kWh
+  - collections
+  - disconnections
+  - reconnections
+  - complaints
+  - reference data versions
+- Flag missing, duplicate, or mismatched records.
+
+Offline Behavior
+- Mobile must continue working without network.
+- Store pending changes locally until sync succeeds.
+- Show sync status clearly to the user.
+- Allow retry after failure.
+
+Reference Data To Sync
+- Consumer master
+- Area/book
+- Rate tables
+- Service grid
+- Reading schedule
+- Route list
+- Complaint categories
+- Approval flags
+
+Implementation Order
+1. Define shared data contracts.
+2. Identify mobile offline tables and queues.
+3. Add stable transaction IDs and duplicate keys.
+4. Build mobile-to-web upload flow.
+5. Build web-to-mobile reference download flow.
+6. Add reconciliation reports.
+7. Add conflict handling and audit history.
+8. Test billing, collections, disconnection, and complaints sync.
+
+Acceptance Criteria
+- Mobile can work offline and later sync safely.
+- Web can accept mobile records without duplicates.
+- Desktop, web, and mobile use the same shared contracts.
+- Sync issues are visible and auditable.
+- Billing math stays unchanged across all platforms.
+
+Prompt Templates
+
+Prompt 1: Mobile Sync Inventory
+Use $cross-platform-sync and $shared-contract-governance.
+
+Analyze the mobile app sync model and identify:
+- offline tables
+- queued operations
+- upload/download flows
+- duplicate prevention rules
+- conflict handling
+- audit requirements
+
+Prompt 2: Shared Contract Alignment
+Use $multi-platform-team-workflow and $mysql55-safety.
+
+Align desktop, web, and mobile contracts for:
+- reading
+- billing
+- collections
+- disconnection
+- reconnection
+- complaints
+- rates
+- schedules
+
+Prompt 3: Sync Verification
+Use $shared-contract-governance.
+
+Test that a record created on mobile:
+- survives offline
+- syncs once
+- appears in web reports
+- matches desktop reconciliation
+- does not duplicate on retry
+

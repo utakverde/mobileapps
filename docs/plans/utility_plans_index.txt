@@ -1,0 +1,70 @@
+UTILITY PLANS INDEX
+
+Start Here
+1. [utility_master_harmony_plan.txt](./utility_master_harmony_plan.txt)
+
+Core Planning Files
+2. [utility_module_inventory.txt](./utility_module_inventory.txt)
+3. [utility_platform_overview.txt](./utility_platform_overview.txt)
+4. [utility_full_implementation_checklist.txt](./utility_full_implementation_checklist.txt)
+5. [utility_web_conversion_master_plan.txt](./utility_web_conversion_master_plan.txt)
+
+Specialized Planning Files
+6. [utility_accounting_integration_plan.txt](./utility_accounting_integration_plan.txt)
+7. [utility_finance_map_complaints_addendum.txt](./utility_finance_map_complaints_addendum.txt)
+8. [utility_mobile_sync_plan.txt](./utility_mobile_sync_plan.txt)
+9. [utility_agents_and_skills_matrix.txt](./utility_agents_and_skills_matrix.txt)
+10. [utility_task_selector.txt](./utility_task_selector.txt)
+11. [utility_starter_bundle.txt](./utility_starter_bundle.txt)
+12. [utility_phase_1_prompt.txt](./utility_phase_1_prompt.txt)
+13. [utility_phase_1_agent_command.txt](./utility_phase_1_agent_command.txt)
+14. [utility_development_prompt_pack.txt](./utility_development_prompt_pack.txt)
+
+BAPA-Specific Reference Files
+15. [bapa_full_implementation_checklist.txt](./bapa_full_implementation_checklist.txt)
+16. [bapa_desktop_to_web_conversion_plan.txt](./bapa_desktop_to_web_conversion_plan.txt)
+17. [bapa_development_prompt_pack.txt](./bapa_development_prompt_pack.txt)
+
+Recommended Reading Order
+1. Read the master harmony plan first.
+2. Read the module inventory second.
+3. Read the platform overview third.
+4. Read the web conversion master plan fourth.
+5. Read the full implementation checklist fifth.
+6. Read the accounting, finance/map/complaints, and mobile sync files after that.
+7. Use the BAPA-specific files only when working on BAPA behavior, BAPA mode logic, or BAPA parity testing.
+
+How The Files Fit Together
+- Master harmony plan
+  - defines the shared terms and structure
+- Module inventory
+  - defines the desktop-to-web module map
+- Platform overview
+  - defines the shared desktop/web/mobile structure
+- Web conversion master plan
+  - defines the architecture and conversion path
+- Full implementation checklist
+  - defines the implementation scope and order
+- Accounting plan
+  - defines export/posting integration
+- Finance/map/complaints addendum
+  - defines analytics, map, and complaint workflows
+- Mobile sync plan
+  - defines offline-first mobile synchronization
+- Agents and skills matrix
+  - maps task types to the best workflow roles
+- Task selector
+  - gives the shortest routing path for each task type
+- Starter bundle
+  - tells you when to start and what must be ready first
+- Phase 1 prompt
+  - exact prompt for the first implementation pass
+- Phase 1 agent command
+  - copy/paste version for quick task launch
+- Prompt pack
+  - defines reusable prompts for agents and skills
+- BAPA files
+  - specialize the shared platform for the BAPA account family
+
+Development Rule
+- Keep all future work aligned to the master harmony plan so new modules, reports, and integrations stay consistent.

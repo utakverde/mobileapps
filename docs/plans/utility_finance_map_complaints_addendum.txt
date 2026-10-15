@@ -1,0 +1,115 @@
+UTILITY FINANCE, ANALYSIS, MAP, AND COMPLAINTS ADDENDUM
+
+Purpose
+- Extend the utility web conversion plan to include financial analysis, trading-related analysis, system map integration, and complaints management.
+- Keep these as first-class modules instead of ad hoc reports.
+
+Primary Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Finance Analysis Scope
+- Collections trend analysis
+- Receivables trend analysis
+- Aging trend analysis
+- Bill variance analysis
+- Area and book performance analysis
+- Rate-code performance analysis
+- Payment timing analysis
+- Discount and subsidy analysis
+- Comparison of expected vs actual revenue
+- Month-over-month and year-over-year comparisons
+
+Possible Trading-Related Scope
+- If the desktop system includes trading or trading-like financial views, treat them as analytical reports first.
+- Do not assume external market integration unless the desktop proves it exists.
+- Support:
+  - transaction trend analysis
+  - volume analysis
+  - amount analysis
+  - exception detection
+  - summary dashboards
+
+System Map Scope
+- Consumer location and route mapping
+- Area and book map overlay
+- Service grid visualization
+- Field route planning support
+- Complaint location mapping
+- Disconnection and reconnection location tracking
+- Infrastructure visualization for operations
+
+Complaints Scope
+- Complaint intake
+- Complaint classification
+- Complaint assignment
+- Complaint status tracking
+- Response and resolution timestamps
+- Complaint attachment or note history
+- Link complaint records to consumer account, area, book, and field action
+
+Required Data Contracts
+- Financial Summary
+- Variance Report
+- Trend Series
+- Map Location
+- Route / Area Node
+- Complaint Ticket
+- Complaint Assignment
+- Complaint Resolution
+
+Integration Requirements
+- All financial analysis outputs must be read-only unless explicitly designed as a write workflow.
+- Map data should be reference-linked to consumers and operational records.
+- Complaint workflows must preserve audit history and status transitions.
+- Sync should be idempotent for complaint uploads and map updates.
+
+Implementation Order
+1. Define financial analysis metrics and report outputs.
+2. Add trading-style analysis only if the desktop data model supports it.
+3. Define map data model and routing references.
+4. Build complaints intake and tracking.
+5. Add audit and reconciliation for all four areas.
+6. Add export and reporting support.
+
+Prompt Templates
+
+Prompt 1: Financial Analysis
+Use $multi-platform-team-workflow and $shared-contract-governance.
+
+Analyze the desktop financial reports and define:
+- trend metrics
+- variance metrics
+- collections performance
+- receivables aging
+- rate and fee performance
+
+Prompt 2: Trading Analysis
+Use $shared-contract-governance.
+
+If trading-related reports exist in the desktop app, inventory them and define a safe web equivalent.
+Do not invent market functionality that does not exist in the desktop data.
+
+Prompt 3: System Map Integration
+Use $multi-platform-team-workflow and $cross-platform-sync.
+
+Design system map support for consumers, routes, areas, and field actions.
+Define:
+- location reference fields
+- map drilldown behavior
+- sync handling
+- audit trail
+
+Prompt 4: Complaints Workflow
+Use $multi-platform-team-workflow.
+
+Design complaints intake and tracking with:
+- ticket number
+- account linkage
+- status workflow
+- assignment
+- resolution notes
+- audit history
+

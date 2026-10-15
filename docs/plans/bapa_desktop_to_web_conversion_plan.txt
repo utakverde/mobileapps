@@ -1,0 +1,243 @@
+BAPA DESKTOP TO WEB CONVERSION PLAN
+
+Purpose
+- Convert the desktop FUBCS BAPA workflows into a web application without changing billing mathematics.
+- Preserve existing calculations, audit behavior, preview/rollback safety, and reconciliation rules.
+- Support both BAPA main and BAPA individual flows as variants of the same billing contract.
+
+Core Rules
+- Do not rewrite the billing engine blindly. First document the desktop behavior and match it in web.
+- Keep all changes backward compatible with MySQL 5.5.
+- Every data-changing action must have:
+  - preview SQL
+  - rollback SQL
+  - stable transaction ID
+  - duplicate prevention
+  - audit history
+  - reconciliation record
+- Treat desktop and web as clients of the same billing rules.
+- Do not let UI code own the financial logic.
+
+Primary Skills To Use
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Recommended Agent Roles
+- repository_analyzer
+  - Map the desktop forms, tables, reports, and hidden dependencies.
+  - Produce a module inventory and a source-of-truth table map.
+- solution_architect
+  - Define the target web architecture, service boundaries, and migration phases.
+  - Decide which logic becomes shared API logic and which remains UI only.
+- integration_tester
+  - Verify desktop-to-web parity using sample accounts and real records.
+  - Test BAPA main, BAPA individual, disconnection, reconnection, and net metering.
+- security_reviewer
+  - Check login, session, password handling, file upload, sync, and rollback safety.
+  - Confirm no sensitive billing data is logged.
+- release_engineer
+  - Plan staged rollout, rollback strategy, and production deployment order.
+  - Confirm export/import compatibility before release.
+
+Desktop Modules To Map
+- frmBilling_ManualPosting
+  - Web equivalent: billing create, bill update, bill adjustment, and print preview.
+- frmBilling_ManualPosting_Query
+  - Web equivalent: bill search, drilldown, and anomaly checker.
+- frmPrintPreview
+  - Web equivalent: printable preview page and PDF/export stage.
+- frmProgressBar
+  - Web equivalent: async job status and progress indicator.
+- frmPassword_Reconfirmation
+  - Web equivalent: confirm password before posting, rollback, or approval.
+- frmNewMembers
+  - Web equivalent: consumer onboarding and account setup.
+- frmPanelUser
+  - Web equivalent: user management and role access.
+
+BAPA Main vs BAPA Individual
+- Treat both as the same billing family with different account classification and report grouping.
+- Main tasks:
+  - create bill
+  - update bill
+  - adjust bill
+  - reconcile totals
+- Individual tasks:
+  - same core calculation path
+  - different account scope or ownership grouping
+  - separate reporting and filtering rules if required by desktop behavior
+- Important:
+  - Keep one shared calculator.
+  - Use account type rules to branch behavior, not duplicated formulas.
+
+Conversion Architecture
+- Web frontend
+  - Bill preview page
+  - Bill adjustment page
+  - Sales and collections reports
+  - Aging and reconciliation reports
+  - BAPA main / BAPA individual filters
+- PHP API
+  - Reading and billing services
+  - Payment and collection services
+  - Adjustments and rollback services
+  - Audit and reconciliation services
+- Database
+  - MySQL 5.5 compatible schema
+  - idempotency keys and transaction history
+  - duplicate prevention indexes
+  - preview and rollback support tables
+- Android offline client
+  - local SQLite
+  - queued uploads
+  - sync status
+  - conflict and duplicate prevention
+
+Required Data Contracts
+- Consumer
+- Reading
+- Bill
+- Bill Adjustment
+- Payment
+- Disconnection
+- Reconnection
+- Lifeline
+- Senior
+- Net Metering
+- Audit Trail
+- Sync Queue
+
+Safe Billing Change Workflow
+1. Load the current live record.
+2. Recompute using the same desktop rules.
+3. Show preview differences.
+4. Generate preview SQL.
+5. Store a transaction ID.
+6. Wait for approval.
+7. Apply the change once.
+8. Store rollback SQL and audit history.
+9. Reconcile the result after posting.
+
+Duplicate Prevention
+- Use a stable transaction key from:
+  - source system
+  - account number
+  - bill month
+  - record type
+  - source-side sequence or OR number
+- Reject duplicate posting if the same transaction key already exists.
+- Make imports and sync retries idempotent.
+
+Reconciliation Checks
+- Sales totals by bill month, area, and book
+- Collections totals
+- Aging totals
+- Disconnection totals
+- Reconnection totals
+- New connection totals
+- Lifeline discount totals
+- Senior discount totals
+- KWH anomaly totals
+- Bill update and adjustment drift
+
+Important Validation Cases
+- Normal residential billing
+- BAPA main
+- BAPA individual
+- Lifeline account
+- Senior account
+- Disconnection workflow
+- Reconnection workflow
+- Net metering
+- Bills with zero or missing database values
+- Bills that print correctly but are wrong in stored data
+
+Development Prompt Templates
+
+Prompt 1 - Desktop analysis
+Use $multi-platform-team-workflow and $shared-contract-governance.
+
+Analyze the desktop BAPA main and BAPA individual workflows and map:
+- billing create
+- bill update
+- bill adjustment
+- print preview
+- payment/collection
+- disconnection/reconnection
+- reconciliation
+
+Do not change code yet. First produce:
+- module inventory
+- data contract list
+- calculation dependencies
+- fields that differ between main and individual
+- risks of contract drift
+
+Prompt 2 - Web conversion design
+Use $multi-platform-team-workflow, $shared-contract-governance, and $mysql55-safety.
+
+Design the PHP web version of the desktop billing modules.
+Preserve the desktop billing calculation logic.
+Define:
+- preview SQL
+- rollback SQL
+- stable transaction IDs
+- duplicate prevention
+- audit history
+- reconciliation tables
+- MySQL 5.5 compatible schema
+
+Prompt 3 - Sync design
+Use $cross-platform-sync and $mysql55-safety.
+
+Design offline SQLite to web synchronization for billing, payments, disconnections, and reconnections.
+Define:
+- idempotent upload
+- retry behavior
+- conflict resolution
+- duplicate rejection
+- reconciliation summary
+- audit trail
+
+Prompt 4 - Verification
+Use $shared-contract-governance and $multi-platform-team-workflow.
+
+Verify that the web version matches the desktop BAPA main and BAPA individual results for:
+- total bill
+- kWh
+- lifeline
+- senior
+- collections
+- aging
+- disconnection
+- reconnection
+
+Return a pass/fail matrix and list any mismatched fields.
+
+Implementation Phases
+- Phase 1: document desktop behavior and field mapping
+- Phase 2: shared calculation and contract layer
+- Phase 3: web preview and read-only reporting
+- Phase 4: update/adjust with rollback SQL
+- Phase 5: sync and duplicate prevention
+- Phase 6: audit and reconciliation
+- Phase 7: security, testing, and release
+
+Files To Keep In Sync
+- desktop form logic
+- mobile calculator logic
+- API endpoints
+- MySQL schema scripts
+- SQLite import/export scripts
+- report templates
+- reconciliation outputs
+
+Exit Criteria
+- BAPA main and BAPA individual produce matching results in desktop and web.
+- Preview and rollback are available for every write action.
+- Duplicate uploads are blocked.
+- Reconciliation reports show no unexplained drift.
+- Net metering, lifeline, senior, disconnection, and reconnection are all validated.
+

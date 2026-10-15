@@ -1,0 +1,73 @@
+{
+  "name": "powerread-mobile",
+  "version": "1.0.7",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"app/**/*.{js,jsx,ts,tsx}\" \"src/**/*.{js,jsx,ts,tsx}\" \"services/**/*.{js,jsx,ts,tsx}\" \"database/**/*.{js,jsx,ts,tsx}\" \"tests/**/*.{js,jsx,ts,tsx}\"",
+    "doctor": "expo-doctor",
+    "test:invoice": "node tests/invoiceCalculator.test.js"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "~14.0.4",
+    "@react-navigation/drawer": "^7.1.1",
+    "expo": "~52.0.0",
+    "expo-camera": "~16.0.0",
+    "expo-constants": "~17.0.8",
+    "expo-document-picker": "~13.0.3",
+    "expo-file-system": "~18.0.0",
+    "expo-font": "~13.0.0",
+    "expo-linking": "~7.0.5",
+    "expo-location": "~18.0.0",
+    "expo-router": "~4.0.0",
+    "expo-sharing": "~13.0.1",
+    "expo-splash-screen": "~0.29.0",
+    "expo-sqlite": "~15.1.4",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.9",
+    "react-native-bluetooth-classic": "^1.73.0-rc.17",
+    "react-native-chart-kit": "^6.12.0",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-paper": "^5.12.3",
+    "react-native-reanimated": "~3.16.1",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.4.0",
+    "react-native-svg": "15.8.0",
+    "react-native-web": "~0.19.13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@react-native-community/cli-server-api": "^15.0.1",
+    "@types/react": "~18.3.12",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "eslint": "^8.57.0",
+    "eslint-config-expo": "~8.0.1",
+    "expo-doctor": "^1.18.22",
+    "typescript": "^5.3.3"
+  },
+  "private": true,
+  "overrides": {
+    "@xmldom/xmldom": "0.9.10",
+    "postcss": "8.5.14",
+    "tar": "7.5.15"
+  },
+  "expo": {
+    "doctor": {
+      "appConfigFieldsNotSyncedCheck": {
+        "enabled": false
+      },
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-chart-kit",
+          "react-native-bluetooth-classic"
+        ],
+        "listUnknownPackages": true
+      }
+    }
+  }
+}

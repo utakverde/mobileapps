@@ -1,0 +1,225 @@
+UTILITY ACCOUNTING INTEGRATION PLAN
+
+Purpose
+- Define how the utility billing platform can connect to an accounting system without changing billing calculations.
+- Keep the billing platform as the source of truth.
+- Export or post accounting entries in a controlled, auditable, rollback-safe way.
+
+Non-Negotiable Rules
+- Do not replace billing math with accounting logic.
+- Do not post duplicate accounting entries.
+- Every accounting export or post must have:
+  - stable transaction ID
+  - source system identifier
+  - preview
+  - approval
+  - rollback path where supported
+  - audit history
+  - reconciliation record
+- Preserve MySQL 5.5 compatibility.
+- Keep all posting logic idempotent.
+
+Primary Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $mysql55-safety
+
+Recommended Agent Roles
+- repository_analyzer
+  - Identify billing outputs, journal candidates, and source records.
+- solution_architect
+  - Design the accounting interface, mapping layer, and safe posting workflow.
+- integration_tester
+  - Verify export totals, duplicates, and reconciliation behavior.
+- security_reviewer
+  - Review posting permissions, audit trail, and data exposure.
+- release_engineer
+  - Define rollout, cutover, and rollback steps for accounting sync.
+
+Integration Goals
+- Produce accounting-ready summaries from:
+  - collections
+  - bill adjustments
+  - penalties
+  - refunds
+  - reconnect fees
+  - disconnect fees
+  - miscellaneous charges
+  - receivables
+- Support future integration with:
+  - CSV export
+  - API posting
+  - journal entry mapping
+  - period-end summaries
+
+Accounting Objects To Map
+- Customers / consumer master
+- Receivables
+- Cash collections
+- Bill adjustments
+- Refunds / credits
+- Disconnect fees
+- Reconnect fees
+- Penalties and surcharges
+- Miscellaneous charges
+- VAT or tax-related lines where applicable
+- Aging balances
+
+Required Posting Contract
+- Each export row should include:
+  - transaction_id
+  - source_name
+  - account_number
+  - bill_month
+  - document_type
+  - document_number
+  - posting_date
+  - debit_account
+  - credit_account
+  - amount
+  - tax_amount
+  - reference
+  - description
+  - audit_status
+  - sync_status
+
+Posting Rules
+- Post only once per unique transaction key.
+- If a transaction is retried, the system must recognize it as the same posting.
+- Do not generate a new accounting row for the same source event.
+- Use preview mode before any posting to an external accounting system.
+- Keep a posted-versus-pending state for each transaction.
+
+Suggested Integration Patterns
+
+1. CSV Export
+- Generate accounting-friendly CSV files.
+- Include a stable transaction ID on every row.
+- Group by posting period when needed.
+- Suitable for manual import into accounting software.
+
+2. API Posting
+- Send entries to an accounting API if available.
+- Use idempotency keys.
+- Retry safely on network failure.
+- Record request and response metadata in the audit trail.
+
+3. Journal Mapping
+- Map utility events to accounting accounts:
+  - collections -> cash and receivables
+  - bill generation -> receivables and revenue
+  - adjustments -> adjustment revenue or contra accounts
+  - refunds -> cash and liability or receivable reversal
+  - fees -> other income or fee revenue
+- Keep the mapping configuration-driven where possible.
+
+4. Period-End Summary
+- Provide summary totals by:
+  - billing cycle
+  - bill month
+  - area
+  - book
+  - account family
+  - collection type
+- Support month-end and year-end reconciliation.
+
+Audit and Reconciliation
+- Store the full accounting export history.
+- Track export status:
+  - pending
+  - previewed
+  - exported
+  - posted
+  - failed
+  - reversed
+- Reconcile exported totals against billing totals.
+- Flag:
+  - missing postings
+  - duplicate postings
+  - mismatched amounts
+  - unmatched document numbers
+
+Rollback and Recovery
+- If the accounting system supports reversals, generate reversal entries.
+- If it does not, mark the posting as failed or reversed in the utility system and prevent duplicate reposting.
+- Keep original utility records unchanged.
+- Store all reversal references in audit history.
+
+Required Database Concepts
+- Accounting export batch
+- Accounting export row
+- Transaction ID
+- Source system identifier
+- Posting status
+- Posting response
+- Export timestamp
+- Reversal reference
+- Duplicate key
+- Reconciliation status
+
+Implementation Order
+1. Identify accounting-worthy utility events.
+2. Define posting contract and field mapping.
+3. Build preview/export report.
+4. Add idempotent export tracking.
+5. Add reconciliation and duplicate prevention.
+6. Add API or CSV posting path.
+7. Add reversal/rollback handling where supported.
+8. Test with collections, adjustments, and fees.
+9. Expand to receivables and period-end summaries.
+10. Harden and document the workflow.
+
+Acceptance Criteria
+- Accounting export does not change billing math.
+- Every exported row has a stable transaction ID.
+- Duplicate exports are blocked.
+- Export totals reconcile to utility totals.
+- Audit history is complete and searchable.
+- Reversals or failed posts can be traced and recovered.
+
+Prompt Templates
+
+Prompt 1: Accounting Mapping
+Use $shared-contract-governance and $multi-platform-team-workflow.
+
+Identify all utility events that should post to accounting.
+Map each event to:
+- debit account
+- credit account
+- amount source
+- tax treatment
+- reversal rule
+
+Prompt 2: Export Design
+Use $multi-platform-team-workflow and $mysql55-safety.
+
+Design an accounting export workflow that supports:
+- preview
+- approval
+- stable transaction IDs
+- duplicate prevention
+- CSV export
+- API posting
+- audit history
+
+Prompt 3: Reconciliation
+Use $shared-contract-governance.
+
+Compare accounting export totals with utility billing totals.
+Return:
+- matched totals
+- unmatched rows
+- duplicate rows
+- amount mismatches
+- reversal rows
+
+Prompt 4: Release Readiness
+Use $multi-platform-team-workflow and $mysql55-safety.
+
+Prepare an accounting integration release plan with:
+- rollback strategy
+- backup plan
+- audit verification
+- reconciliation verification
+- safe cutover steps
+

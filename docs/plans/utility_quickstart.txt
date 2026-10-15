@@ -1,0 +1,88 @@
+UTILITY QUICKSTART
+
+Use these files in this order:
+
+1. utility_master_harmony_plan.txt
+- Master umbrella for the whole utility platform.
+
+2. utility_platform_overview.txt
+- One-page picture of desktop, web, and mobile.
+
+3. utility_plans_index.txt
+- Full index of all planning files.
+
+4. utility_execution_roadmap.txt
+- Build order and phase sequence.
+
+5. utility_module_inventory.txt
+- Desktop module and web counterpart map.
+
+6. utility_web_conversion_master_plan.txt
+- Web architecture and conversion plan.
+
+7. utility_full_implementation_checklist.txt
+- Full implementation checklist for the utility platform.
+
+8. utility_mobile_sync_plan.txt
+- Offline-first Android sync design.
+
+9. utility_accounting_integration_plan.txt
+- Accounting export/posting integration.
+
+10. utility_finance_map_complaints_addendum.txt
+- Financial analysis, system map, and complaints planning.
+
+11. utility_development_prompt_pack.txt
+- Reusable prompts for agents and skills.
+
+12. utility_implementation_prompt.txt
+- Start-here prompt for Phase 1 execution.
+
+13. BAPA-specific files
+- Use only when working on BAPA behavior or parity:
+  - bapa_full_implementation_checklist.txt
+  - bapa_desktop_to_web_conversion_plan.txt
+  - bapa_development_prompt_pack.txt
+
+14. utility_agents_and_skills_matrix.txt
+- Use when you need to choose the right skills and agents for a task.
+
+15. utility_task_selector.txt
+- Use when you want a very short “what do I open next?” routing guide.
+
+16. utility_starter_bundle.txt
+- Use when you are ready to start the actual build and want the minimum launch sequence.
+
+17. utility_phase_1_prompt.txt
+- Use when you want the exact prompt for the first implementation pass.
+
+18. utility_phase_1_agent_command.txt
+- Use when you want a copy/paste agent command for Phase 1.
+
+Rule of Thumb
+- If the task changes billing, sync, audit, reconciliation, accounting, or complaints, start from the master harmony plan and the execution roadmap first.
+
+Skills To Use
+- $multi-platform-team-workflow
+  - use for cross-platform architecture, multi-module planning, and coordinated implementation
+- $shared-contract-governance
+  - use for shared data contracts, field aliases, preview/rollback safety, and parity rules
+- $cross-platform-sync
+  - use for desktop-to-web-to-mobile synchronization, offline queues, and idempotent upload
+- $mysql55-safety
+  - use for MySQL 5.5-compatible schema, SQL, and deployment rules
+
+Agents To Use
+- repository_analyzer
+  - inventory desktop modules, screens, tables, and hidden dependencies
+- solution_architect
+  - define platform structure, module boundaries, and migration order
+- integration_tester
+  - verify desktop/web/mobile parity, sync, and reconciliation
+- security_reviewer
+  - review audit, auth, rollback, duplicate prevention, and data exposure
+- release_engineer
+  - plan backups, rollout, rollback, and deployment sequencing
+
+Simple Rule
+- If you are unsure which agent to use, start with repository_analyzer and solution_architect, then add integration_tester, security_reviewer, and release_engineer as the work moves toward verification and release.

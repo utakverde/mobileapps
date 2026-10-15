@@ -1,0 +1,116 @@
+UTILITY TASK SELECTOR
+
+Use this when you need to pick the right plan, skills, and agents quickly.
+
+If the task is about:
+
+1. Desktop module inventory
+- Open:
+  - utility_master_harmony_plan.txt
+  - utility_module_inventory.txt
+- Use skills:
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+- Use agents:
+  - repository_analyzer
+  - solution_architect
+
+2. Web conversion
+- Open:
+  - utility_master_harmony_plan.txt
+  - utility_platform_overview.txt
+  - utility_web_conversion_master_plan.txt
+- Use skills:
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+  - $mysql55-safety
+- Use agents:
+  - solution_architect
+  - integration_tester
+
+3. Billing, rates, schedules, adjustments
+- Open:
+  - utility_execution_roadmap.txt
+  - utility_full_implementation_checklist.txt
+  - utility_web_conversion_master_plan.txt
+- Use skills:
+  - $shared-contract-governance
+  - $mysql55-safety
+- Use agents:
+  - solution_architect
+  - integration_tester
+
+4. Sync and mobile offline work
+- Open:
+  - utility_master_harmony_plan.txt
+  - utility_mobile_sync_plan.txt
+  - utility_agents_and_skills_matrix.txt
+- Use skills:
+  - $cross-platform-sync
+  - $shared-contract-governance
+  - $mysql55-safety
+- Use agents:
+  - repository_analyzer
+  - solution_architect
+  - integration_tester
+
+5. Accounting integration
+- Open:
+  - utility_master_harmony_plan.txt
+  - utility_accounting_integration_plan.txt
+- Use skills:
+  - $shared-contract-governance
+  - $mysql55-safety
+- Use agents:
+  - solution_architect
+  - security_reviewer
+  - release_engineer
+
+6. Financial analysis, system map, complaints
+- Open:
+  - utility_master_harmony_plan.txt
+  - utility_finance_map_complaints_addendum.txt
+  - utility_module_inventory.txt
+- Use skills:
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+  - $cross-platform-sync
+- Use agents:
+  - repository_analyzer
+  - solution_architect
+
+7. Release and hardening
+- Open:
+  - utility_execution_roadmap.txt
+  - utility_agents_and_skills_matrix.txt
+- Use skills:
+  - $multi-platform-team-workflow
+  - $mysql55-safety
+- Use agents:
+  - integration_tester
+  - security_reviewer
+  - release_engineer
+
+8. BAPA-specific work
+- Open:
+  - bapa_full_implementation_checklist.txt
+  - bapa_desktop_to_web_conversion_plan.txt
+  - bapa_development_prompt_pack.txt
+- Use skills:
+  - $multi-platform-team-workflow
+  - $shared-contract-governance
+  - $cross-platform-sync
+  - $mysql55-safety
+- Use agents:
+  - repository_analyzer
+  - solution_architect
+  - integration_tester
+  - security_reviewer
+  - release_engineer
+
+Default rule
+- If you are unsure, start with:
+  - utility_master_harmony_plan.txt
+  - utility_plans_index.txt
+  - utility_task_selector.txt
+

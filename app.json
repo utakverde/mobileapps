@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "SAMELCO II Mobile",
+    "slug": "samelco-ii-mobile",
+    "version": "1.0.7",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#B71C1C"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.powerread.mobile"
+    },
+    "android": {
+      "versionCode": 8,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.powerread.mobile",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_CONNECT",
+        "BLUETOOTH_SCAN"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-camera",
+      "expo-location",
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#B71C1C",
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "scheme": "samelcoii",
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,87 @@
+UTILITY PHASE 1 PROMPT
+
+Use this prompt to begin the first implementation pass.
+
+Required Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Required Agent Order
+1. repository_analyzer
+2. solution_architect
+3. integration_tester
+4. security_reviewer
+5. release_engineer
+
+Read First
+1. utility_master_harmony_plan.txt
+2. utility_platform_overview.txt
+3. utility_plans_index.txt
+4. utility_execution_roadmap.txt
+5. utility_starter_bundle.txt
+6. utility_module_inventory.txt
+
+Phase 1 Objective
+- Produce the complete shared foundation before coding any UI or posting logic.
+- Align desktop, web, and mobile on the same contracts, terminology, and workflow boundaries.
+
+Phase 1 Deliverables
+- full module inventory
+- desktop screen inventory
+- account-family inventory
+- shared data contract map
+- field alias map
+- write-safety rules
+- sync contract rules
+- duplicate-prevention rules
+- preview/rollback requirements
+- reconciliation checkpoints
+- accounting export candidates
+
+Phase 1 Analysis Targets
+- login and mode selection
+- member services
+- billing section
+- finance section
+- teller section
+- data transfer
+- reports center
+- configuration
+- financial analysis
+- system map integration
+- complaints workflow
+- mobile sync
+- accounting integration
+
+Hard Rules
+- Do not code the UI until the shared contracts are agreed.
+- Do not code posting workflows until preview and rollback requirements are defined.
+- Do not code sync until idempotency and duplicate prevention are defined.
+- Do not code accounting until the export contract and reconciliation rules are defined.
+- Preserve existing billing calculations.
+- Keep MySQL 5.5 compatibility.
+
+Prompt Template
+Use $multi-platform-team-workflow, $shared-contract-governance,
+$cross-platform-sync, and $mysql55-safety.
+
+Analyze the desktop utility system and complete Phase 1 by producing:
+- module-by-module inventory
+- screen-by-screen mapping
+- account-family behavior differences
+- canonical shared contracts
+- field aliases and drift risks
+- preview/rollback requirements for writes
+- sync and duplicate-prevention rules
+- reconciliation checkpoints
+- accounting export candidates
+
+Then recommend the exact Phase 2 slice to implement first.
+
+Priority Guidance
+- If the inventory is incomplete, finish the inventory before any implementation.
+- If the contracts are unstable, do not begin coding.
+- If the desktop behavior is ambiguous, mark the ambiguity and request targeted verification.
+

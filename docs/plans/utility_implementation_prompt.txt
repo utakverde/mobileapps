@@ -1,0 +1,86 @@
+UTILITY IMPLEMENTATION PROMPT
+
+Use this prompt to start implementation work for the utility platform.
+
+Required Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Required Agent Order
+1. repository_analyzer
+2. solution_architect
+3. integration_tester
+4. security_reviewer
+5. release_engineer
+
+Read First
+1. utility_master_harmony_plan.txt
+2. utility_platform_overview.txt
+3. utility_plans_index.txt
+4. utility_execution_roadmap.txt
+5. utility_module_inventory.txt
+
+Primary Goal
+- Convert the full desktop utility platform into a coordinated desktop, web, and Android system.
+- Preserve all existing billing calculations and operational behavior.
+- Keep BAPA, regular consumer, net metering, lifeline, senior, disconnection, reconnection, complaints, and accounting integration in harmony.
+
+Hard Rules
+- Do not change billing math unless validated against desktop behavior.
+- Do not invent accounting behavior.
+- Do not post duplicate financial or sync transactions.
+- Every write action must support:
+  - preview SQL
+  - rollback SQL
+  - stable transaction identifiers
+  - audit history
+  - reconciliation
+  - idempotent retry
+- Keep MySQL 5.5 compatibility.
+- Keep mobile offline-first and duplicate-safe.
+
+Phase 1 Output Required
+- module inventory
+- desktop screen inventory
+- account-family inventory
+- shared contract map
+- risky field names and aliases
+- sync and duplicate-prevention rules
+- preview/rollback requirements
+- accounting export candidates
+
+Phase 1 Analysis Targets
+- login and mode selection
+- member services
+- billing section
+- finance section
+- teller section
+- data transfer
+- reports center
+- configuration
+- financial analysis
+- system map integration
+- complaints workflow
+- mobile sync
+- accounting integration
+
+Prompt Template
+Use $multi-platform-team-workflow, $shared-contract-governance,
+$cross-platform-sync, and $mysql55-safety.
+
+Analyze the desktop utility system and produce the Phase 1 deliverables:
+- a complete module inventory
+- a desktop-to-web-to-mobile mapping
+- shared contract and field alias recommendations
+- account family behavior differences
+- write-safety rules for preview, rollback, and audit
+- sync and duplicate-prevention design
+- accounting integration candidates
+
+Then propose the next implementation slice in the order defined by the execution roadmap.
+
+If BAPA-specific work is requested, keep BAPA inside the full utility platform
+and never treat it as a separate system.
+

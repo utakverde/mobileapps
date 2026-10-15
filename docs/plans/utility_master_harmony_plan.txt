@@ -1,0 +1,203 @@
+UTILITY MASTER HARMONY PLAN
+
+Purpose
+- Make all utility conversion, accounting, finance, map, and complaints plans work as one coordinated system.
+- Make the desktop utility, web app, and Android mobile app sync as one coordinated platform.
+- Establish one naming scheme, one module hierarchy, and one implementation order.
+- Ensure every sub-plan supports the same shared contracts and does not contradict the others.
+
+Document Hierarchy
+- This file is the master umbrella.
+- Sub-plans:
+  - utility_platform_overview.txt
+  - utility_module_inventory.txt
+  - utility_full_implementation_checklist.txt
+  - utility_web_conversion_master_plan.txt
+- utility_accounting_integration_plan.txt
+- utility_finance_map_complaints_addendum.txt
+- utility_mobile_sync_plan.txt
+- utility_agents_and_skills_matrix.txt
+- utility_development_prompt_pack.txt
+- BAPA-specific sub-plans remain valid, but they are treated as specializations inside the broader utility platform.
+
+Core Principle
+- One platform.
+- Multiple account families.
+- Shared billing engine.
+- Shared audit and reconciliation model.
+- Separate workflow layers for special cases.
+
+Canonical Terms
+- Utility Platform
+  - the whole desktop-to-web conversion scope
+- Account Family
+  - regular consumer, BAPA main, BAPA individual, net metering, lifeline, senior, and other special classes
+- Module
+  - a user-facing or service-facing feature area
+- Workflow
+  - a sequence of actions like billing, payment, adjustment, disconnection, or complaint handling
+- Contract
+  - the shared data shape used by desktop, web, mobile, and sync layers
+- Posting
+  - a write action that changes financial or operational records
+
+System Layers
+
+1. Identity and Access
+- login
+- mode selection
+- roles and permissions
+- session scope
+
+2. Master Data
+- consumers
+- accounts
+- areas
+- books
+- routes
+- rates
+- service grid
+- users
+
+3. Operations
+- scheduling
+- readings
+- billing
+- collections
+- disconnection
+- reconnection
+- complaints
+
+4. Analytics
+- sales
+- aging
+- unpaid
+- collections
+- financial analysis
+- rate analysis
+- variance analysis
+- trading-style reports if present in the desktop model
+
+5. Transfer and Sync
+- upload
+- download
+- offline packages
+- duplicate prevention
+- conflict resolution
+- reconciliation
+- mobile offline queue
+- device sync status
+
+6. Audit and Control
+- preview
+- approval
+- rollback
+- audit trail
+- transaction IDs
+- approval history
+
+7. Accounting Integration
+- export
+- posting
+- journal mapping
+- reconciliation
+- reversal handling
+
+Relationship Map
+
+Regular Consumer
+- uses the core billing engine
+- shares schedules, collections, reports, audit, and accounting export
+
+BAPA Main
+- uses the same core engine
+- adds BAPA-specific grouping, reports, and validations
+
+BAPA Individual
+- uses the same core engine
+- adds individual member/account grouping and validations
+
+Net Metering
+- uses the core engine with specialized import/export kWh handling
+- remains separate from normal consumption calculations
+
+Lifeline and Senior
+- overlay rules on top of the core engine
+- affect bill calculation and reporting only where the desktop model says so
+
+Disconnection and Reconnection
+- operational workflows connected to billing, collections, and complaints
+
+Complaints
+- links to consumer, account, area, route, and field action data
+
+System Map
+- provides visual reference for consumers, routes, areas, and field operations
+
+Mobile App
+- offline field client
+- creates readings, collections, disconnections, reconnections, and complaints locally
+- syncs with the web platform and reconciles with desktop summaries
+
+Financial Analysis
+- reads from billing, collections, and receivables
+- remains read-only unless explicitly made a write workflow
+
+Trading-Style Analysis
+- only exists if the desktop model truly has such data
+- otherwise treat it as a configurable analytic report class, not a market system
+
+Shared Contract Rules
+- Use the same field names across desktop, web, Android, and accounting export whenever possible.
+- If a legacy field name differs, keep aliases instead of inventing new meanings.
+- Store source system information with every record.
+- All posting actions must be idempotent.
+- Every write must have preview and rollback support.
+
+Implementation Harmony Rules
+1. Start from the module inventory.
+2. Map each module to one web page or service.
+3. Map each posting workflow to preview/apply/rollback states.
+4. Map each report to one source of truth.
+5. Map each sync flow to one idempotent transaction contract.
+6. Map each accounting export to a reconciliation batch.
+7. Make mobile a peer platform, not an afterthought.
+
+Suggested Development Order
+1. Contract and terminology agreement
+2. Module inventory alignment
+3. Shared calculation and posting engine
+4. Read-only parity reports
+5. Write workflows with preview/rollback
+6. Sync and duplicate prevention
+7. Audit and reconciliation
+8. Financial analysis
+9. Complaints and system map integration
+10. Accounting export
+
+How To Use The Sub-Plans
+- utility_platform_overview.txt
+  - use for the one-page desktop/web/mobile platform picture
+- utility_module_inventory.txt
+  - use for screen and function mapping
+- utility_full_implementation_checklist.txt
+  - use for implementation sequencing
+- utility_web_conversion_master_plan.txt
+  - use for the overall web conversion architecture
+- utility_accounting_integration_plan.txt
+  - use for accounting export/posting design
+- utility_finance_map_complaints_addendum.txt
+  - use for finance analytics, map, and complaints scope
+- utility_mobile_sync_plan.txt
+  - use for mobile offline-first and sync design
+- utility_agents_and_skills_matrix.txt
+  - use for selecting the right agents and skills by task type
+- utility_development_prompt_pack.txt
+  - use for agent prompts and workflows
+
+Exit Criteria
+- All sub-plans agree on the same terms and module boundaries.
+- No module is duplicated with conflicting definitions.
+- BAPA is treated as a special account family inside the full utility system.
+- Financial analysis, complaints, map, and accounting fit the same shared platform model.
+- Mobile offline sync is fully aligned with the shared contracts and reconciliation rules.

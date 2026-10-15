@@ -1,0 +1,186 @@
+UTILITY BILLING DEVELOPMENT PROMPT PACK
+
+Use these prompts with the requested skills and agents during implementation.
+
+Shared Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Prompt 1: Desktop Inventory
+Use $multi-platform-team-workflow and $shared-contract-governance.
+
+Spawn repository_analyzer, solution_architect, integration_tester, security_reviewer, and release_engineer.
+Inventory the desktop utility system and identify every module for:
+- consumer management
+- new connection
+- rates
+- scheduling
+- billing
+- bill updates
+- bill adjustments
+- collections
+- disconnection
+- reconnection
+- lifeline
+- senior
+- net metering
+- reports
+- audit
+- reconciliation
+- optional accounting integration
+
+Return:
+- desktop module list
+- functions per module
+- tables touched
+- fields required
+- fields that differ between account families
+- data risks and contract drift risks
+
+Prompt 2: Shared Contract Design
+Use $shared-contract-governance and $mysql55-safety.
+
+Design one shared billing contract for desktop, web, and Android offline sync.
+Preserve existing billing calculations.
+Define:
+- consumer schema
+- reading schema
+- bill schema
+- collection schema
+- schedule schema
+- adjustment schema
+- audit schema
+- sync queue schema
+- rollback schema
+- accounting export schema
+
+Prompt 3: Web Module Conversion
+Use $multi-platform-team-workflow.
+
+Convert each desktop module into a web module without changing the billing math.
+For each module, specify:
+- UI page
+- API endpoint
+- database table or view
+- preview SQL
+- rollback SQL
+- audit event
+- duplicate prevention rule
+
+Prompt 4: Billing and Adjustment Safety
+Use $shared-contract-governance and $mysql55-safety.
+
+Implement bill creation, bill update, and bill adjustment with:
+- same logic as desktop
+- preview before apply
+- rollback SQL
+- stable transaction IDs
+- audit history
+- duplicate prevention
+- independent validation before posting
+
+Prompt 5: Collections and Accounting
+Use $multi-platform-team-workflow and $shared-contract-governance.
+
+Design collection posting and accounting integration.
+Preserve current collection logic.
+Define:
+- receipt posting
+- OR duplicate prevention
+- aging impact
+- receivable updates
+- accounting export interface
+- audit trail
+
+Prompt 6: Scheduling and Operations
+Use $shared-contract-governance.
+
+Implement scheduling for reading, billing, disconnection, and reconnection.
+Match desktop behavior for due dates and cycle handling.
+Define rollback rules and audit events for schedule changes.
+
+Prompt 7: Sync and Offline
+Use $cross-platform-sync and $mysql55-safety.
+
+Design offline SQLite sync for mobile and desktop imports.
+Define:
+- idempotent upload
+- conflict resolution
+- duplicate rejection
+- sync status
+- retry rules
+- reconciliation summary
+
+Prompt 8: Reconciliation and Reports
+Use $multi-platform-team-workflow.
+
+Replicate desktop reports in web:
+- sales
+- collections
+- aging
+- disconnection
+- reconnection
+- new connection
+- lifeline
+- senior
+- kWh anomaly
+- adjustments
+- accounting export summary
+
+Prompt 9: Verification
+Use $shared-contract-governance and $multi-platform-team-workflow.
+
+Compare desktop and web outputs for:
+- normal accounts
+- BAPA
+- commercial
+- industrial
+- disconnection
+- reconnection
+- lifeline
+- senior
+- net metering
+
+Return:
+- pass/fail per module
+- mismatched totals
+- missing fields
+- unresolved assumptions
+
+Prompt 10: Release Readiness
+Use $multi-platform-team-workflow and $mysql55-safety.
+
+Create a release plan with:
+- phased rollout
+- data backup
+- rollback procedure
+- audit verification
+- reconciliation verification
+- accounting integration guardrails
+
+Agent Assignment Guide
+- repository_analyzer
+  - Map desktop source behavior and trace dependencies.
+- solution_architect
+  - Define the target web architecture and service boundaries.
+- integration_tester
+  - Test parity across desktop, web, and sync flows.
+- security_reviewer
+  - Review auth, audit, rollback, and data exposure risks.
+- release_engineer
+  - Prepare deployment order and rollback strategy.
+
+Suggested Build Phases
+1. Inventory and contract mapping
+2. Shared calculation engine
+3. Read-only parity reports
+4. Bill create/update/adjustment
+5. Collections and receipts
+6. Scheduling and disconnection/reconnection
+7. Reconciliation and audit
+8. Offline sync
+9. Optional accounting export
+10. Production hardening
+

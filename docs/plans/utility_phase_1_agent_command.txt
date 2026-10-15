@@ -1,0 +1,71 @@
+UTILITY PHASE 1 AGENT COMMAND
+
+Use this exact command when starting Phase 1 work.
+
+Use $multi-platform-team-workflow, $shared-contract-governance,
+$cross-platform-sync, and $mysql55-safety.
+
+Spawn repository_analyzer, solution_architect, integration_tester,
+security_reviewer, and release_engineer.
+
+Read first:
+1. utility_master_harmony_plan.txt
+2. utility_platform_overview.txt
+3. utility_plans_index.txt
+4. utility_execution_roadmap.txt
+5. utility_starter_bundle.txt
+6. utility_module_inventory.txt
+
+Phase 1 objective:
+- Produce the complete shared foundation before coding any UI or posting logic.
+- Align desktop, web, and mobile on the same contracts, terminology, and workflow boundaries.
+
+Phase 1 deliverables:
+- full module inventory
+- desktop screen inventory
+- account-family inventory
+- shared data contract map
+- field alias map
+- write-safety rules
+- sync contract rules
+- duplicate-prevention rules
+- preview/rollback requirements
+- reconciliation checkpoints
+- accounting export candidates
+
+Phase 1 analysis targets:
+- login and mode selection
+- member services
+- billing section
+- finance section
+- teller section
+- data transfer
+- reports center
+- configuration
+- financial analysis
+- system map integration
+- complaints workflow
+- mobile sync
+- accounting integration
+
+Hard rules:
+- Do not code the UI until the shared contracts are agreed.
+- Do not code posting workflows until preview and rollback requirements are defined.
+- Do not code sync until idempotency and duplicate prevention are defined.
+- Do not code accounting until the export contract and reconciliation rules are defined.
+- Preserve existing billing calculations.
+- Keep MySQL 5.5 compatibility.
+
+What to return:
+- module-by-module inventory
+- screen-by-screen mapping
+- account-family behavior differences
+- canonical shared contracts
+- field aliases and drift risks
+- preview/rollback requirements for writes
+- sync and duplicate-prevention rules
+- reconciliation checkpoints
+- accounting export candidates
+
+Then recommend the exact Phase 2 slice to implement first.
+

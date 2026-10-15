@@ -1,0 +1,52 @@
+UTILITY STARTER BUNDLE
+
+Open these files first:
+1. utility_master_harmony_plan.txt
+2. utility_platform_overview.txt
+3. utility_quickstart.txt
+4. utility_task_selector.txt
+5. utility_agents_and_skills_matrix.txt
+
+Use these skills:
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Use these agents in order:
+1. repository_analyzer
+2. solution_architect
+3. integration_tester
+4. security_reviewer
+5. release_engineer
+
+When To Start The Creation
+- Start as soon as the shared contracts are agreed and the Phase 1 inventory is complete.
+- If you do not yet have the module inventory and platform overview, do not start coding.
+- First finish:
+  - desktop module inventory
+  - shared data contracts
+  - account-family rules
+  - preview/rollback rules
+  - sync and duplicate-prevention rules
+- Then start implementation in this order:
+  1. shared contract layer
+  2. read-only parity reports
+  3. web core pages and APIs
+  4. write workflows with preview/rollback
+  5. mobile sync
+  6. accounting integration
+  7. testing and release
+
+Start Conditions
+- Start coding only when:
+  - the module inventory is finalized
+  - the platform overview is accepted
+  - the roadmap is approved
+  - the first desktop-to-web parity target is selected
+- If the target is unclear, start with the regular consumer billing path, then add BAPA, net metering, complaints, map, and accounting once the shared core is stable.
+
+Creation Rule
+- Do not jump directly into UI code before the shared contracts and parity rules are defined.
+- Do not add sync or accounting before the core billing and audit model exists.
+

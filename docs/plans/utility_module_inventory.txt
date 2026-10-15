@@ -1,0 +1,531 @@
+UTILITY MODULE INVENTORY
+
+Purpose
+- Inventory the desktop utility application modules so they can be recreated in the web platform.
+- Use this as the master reference for desktop-to-web mapping, reporting, sync, and accounting integration.
+
+Scope Note
+- This inventory is based on the visible desktop menu structure, project logs, and existing utility planning files.
+- The desktop system is larger than BAPA alone.
+- BAPA is one account family inside the broader utility platform.
+
+Top-Level Desktop Areas
+- Member Services
+- Billing Section
+- Finance Section
+- Teller Section
+- Data Transfer
+- Reports Center
+- Configuration
+- Login / Mode Selection
+- User Panel / Role Access
+
+Login / Mode Selection
+- Purpose
+  - Choose billing context before entering the application.
+- Modes
+  - Regular Consumer
+  - BAPA Main
+  - BAPA Individual
+  - Net Metering
+- Web counterpart
+  - Login with mode selector
+  - Session-scoped billing family
+  - Role-based dashboard routing
+
+Member Services
+
+1. Members Profile
+- Desktop function
+  - View and maintain consumer/member profile data.
+- Likely data
+  - account number
+  - name
+  - address
+  - area
+  - book
+  - meter data
+  - account type
+- Web counterpart
+  - consumer profile page
+  - searchable account directory
+
+2. Billing Master
+- Desktop function
+  - Manage master consumer billing data.
+- Likely data
+  - billing setup
+  - status
+  - rate class
+  - history reference
+- Web counterpart
+  - master account management
+  - consumer billing settings
+
+3. Query Members
+- Desktop function
+  - Search and inspect consumer/member records.
+- Web counterpart
+  - member search and drilldown screen
+
+4. Sequencing
+- Desktop function
+  - Manage sequence/order of records or billing runs.
+- Web counterpart
+  - billing sequence management
+  - batch order control
+
+5. Route Monitoring
+- Desktop function
+  - Monitor route assignments and route-related operations.
+- Web counterpart
+  - route dashboard
+  - field route monitoring
+
+Billing Section
+
+1. Manual Posting
+- Desktop function
+  - Create bills manually using billing computation rules.
+- Web counterpart
+  - billing create page
+  - preview before posting
+  - rollback SQL for corrections
+
+2. Posting by Area
+- Desktop function
+  - Batch posting for a specific area.
+- Web counterpart
+  - area-based batch billing
+
+3. BAPA Manual Posting
+- Desktop function
+  - Billing entry workflow for BAPA accounts.
+- Web counterpart
+  - BAPA billing page with mode-specific logic
+
+4. BAPA Batch Printing
+- Desktop function
+  - Generate batch bills/prints for BAPA.
+- Web counterpart
+  - batch print preview and export
+
+5. BAPA Payment Posting
+- Desktop function
+  - Post payments for BAPA accounts.
+- Web counterpart
+  - BAPA payment/collection posting
+
+6. Manual Posting Net Metering
+- Desktop function
+  - Net metering bill calculation and posting.
+- Web counterpart
+  - net metering billing page
+  - export/import handling
+
+7. Flat Rate
+- Desktop function
+  - Apply flat-rate billing rules.
+- Web counterpart
+  - flat-rate billing module
+
+8. Other Charges
+- Desktop function
+  - Post miscellaneous billing charges.
+- Web counterpart
+  - extra charge posting screen
+
+9. Route Monitoring
+- Desktop function
+  - Track route-linked billing operations.
+- Web counterpart
+  - route monitoring dashboard
+
+10. Billing Register
+- Desktop function
+  - View bill posting register.
+- Web counterpart
+  - billing register report
+
+11. Billing Logs
+- Desktop function
+  - Inspect billing action history.
+- Web counterpart
+  - billing audit log
+
+12. System Logs
+- Desktop function
+  - Inspect technical/system events.
+- Web counterpart
+  - system activity log
+
+Finance Section
+
+1. ERC and Tax Rates
+- Desktop function
+  - Maintain regulatory and tax rates.
+- Web counterpart
+  - tax and ERC rate configuration
+
+2. Reading Schedule
+- Desktop function
+  - Manage reading schedules and cycles.
+- Web counterpart
+  - reading schedule page
+
+3. Service Grid
+- Desktop function
+  - Maintain service/rate grid.
+- Web counterpart
+  - service grid setup
+
+4. Bill Adjustment
+- Desktop function
+  - Adjust bills and recalculate amounts.
+- Web counterpart
+  - bill adjustment page with preview and rollback
+
+5. Late Billing
+- Desktop function
+  - Process late-bill cases.
+- Web counterpart
+  - late billing page
+
+6. Adjustment Report
+- Desktop function
+  - Report bill adjustments.
+- Web counterpart
+  - adjustment report
+
+7. Late Billing Report
+- Desktop function
+  - Report late-bill transactions.
+- Web counterpart
+  - late billing report
+
+Teller Section
+
+1. Payment Collection
+- Desktop function
+  - Post payments and receipts.
+- Web counterpart
+  - cashier collection screen
+
+2. Collection Report
+- Desktop function
+  - Summarize collections.
+- Web counterpart
+  - collection summary report
+
+3. Collection by OR
+- Desktop function
+  - Search collections by official receipt number.
+- Web counterpart
+  - OR lookup screen
+
+4. Collection by Bill
+- Desktop function
+  - Search collections by bill number.
+- Web counterpart
+  - bill lookup screen
+
+5. Membership Bill Payments
+- Desktop function
+  - Post membership-related payments.
+- Web counterpart
+  - membership payment module
+
+6. Non Power Bill Payments
+- Desktop function
+  - Post non-power bill payments.
+- Web counterpart
+  - miscellaneous payment module
+
+Data Transfer
+
+1. Book List
+- Desktop function
+  - Manage books for transfer or processing.
+- Web counterpart
+  - book list administration
+
+2. Upload to Device
+- Desktop function
+  - Send data to field device.
+- Web counterpart
+  - export/upload job
+
+3. Download from Device
+- Desktop function
+  - Import data from device.
+- Web counterpart
+  - download/import job
+
+4. Offline Download
+- Desktop function
+  - Create offline transfer package.
+- Web counterpart
+  - offline sync package generation
+
+5. Upload Disconnection
+- Desktop function
+  - Push disconnection data.
+- Web counterpart
+  - disconnection upload job
+
+6. Download Paid Disco
+- Desktop function
+  - Pull paid disconnection data.
+- Web counterpart
+  - paid disconnection sync
+
+7. Offline Download Disco
+- Desktop function
+  - Offline disconnection package.
+- Web counterpart
+  - offline disconnection export
+
+8. System Update
+- Desktop function
+  - Update local database/system components.
+- Web counterpart
+  - data/schema update workflow
+
+9. XZ Device Reading
+- Desktop function
+  - Device-specific reading import.
+- Web counterpart
+  - device reading integration endpoint
+
+Reports Center
+
+1. Billing Register
+- Desktop function
+  - Billing register summary.
+- Web counterpart
+  - billing register report
+
+2. Sales by Area
+- Desktop function
+  - Sales grouped by area.
+- Web counterpart
+  - sales by area report
+
+3. Over All Sales
+- Desktop function
+  - Total sales summary.
+- Web counterpart
+  - overall sales report
+
+4. Sales by Ratecode
+- Desktop function
+  - Sales grouped by rate code.
+- Web counterpart
+  - sales by ratecode report
+
+5. Sales by Fees
+- Desktop function
+  - Sales grouped by fee type.
+- Web counterpart
+  - fee summary report
+
+6. Sales by Rate
+- Desktop function
+  - Sales grouped by rate.
+- Web counterpart
+  - sales by rate report
+
+7. Collection Sales
+- Desktop function
+  - Sales/collections comparison.
+- Web counterpart
+  - collection sales report
+
+8. Aging Analysis
+- Desktop function
+  - Aging computation and analysis.
+- Web counterpart
+  - aging report
+
+9. Aging Summary
+- Desktop function
+  - Aging summary by bucket.
+- Web counterpart
+  - aging summary report
+
+10. Unpaid Bills
+- Desktop function
+  - Unpaid bill list.
+- Web counterpart
+  - unpaid bills report
+
+11. Consumer Data
+- Desktop function
+  - Consumer information summary.
+- Web counterpart
+  - consumer summary report
+
+12. Collected UC's
+- Desktop function
+  - Collected UC summary.
+- Web counterpart
+  - collected UC report
+
+13. VAT
+- Desktop function
+  - VAT-related reporting.
+- Web counterpart
+  - VAT report
+
+14. Collection
+- Desktop function
+  - General collection reporting.
+- Web counterpart
+  - collection report
+
+15. MCC and Others
+- Desktop function
+  - Miscellaneous charge category report.
+- Web counterpart
+  - other charges report
+
+16. Lifeline
+- Desktop function
+  - Lifeline summary and discounts.
+- Web counterpart
+  - lifeline report
+
+17. Batch Receipt
+- Desktop function
+  - Batch receipt output.
+- Web counterpart
+  - batch receipt export/print
+
+18. Financial Analysis
+- Desktop function
+  - Analyze financial performance, collections, receivables, aging, and variance.
+- Web counterpart
+  - financial analysis dashboard
+  - trend and variance reports
+
+19. Trading / Trading-Related Analysis
+- Desktop function
+  - Analyze trade-related or market-related financial metrics if present in the utility system.
+- Web counterpart
+  - trading analysis dashboard
+  - transaction trend views
+  - summary charts
+
+Configuration
+
+1. Configuration
+- Desktop function
+  - General system settings.
+- Web counterpart
+  - application settings page
+
+2. System Users
+- Desktop function
+  - Manage user accounts and permissions.
+- Web counterpart
+  - user and role administration
+
+3. Area/Book
+- Desktop function
+  - Manage area and book structures.
+- Web counterpart
+  - area/book master page
+
+4. Service Grid
+- Desktop function
+  - Manage service/rate grid setup.
+- Web counterpart
+  - service grid master page
+
+5. Database Update
+- Desktop function
+  - Apply database updates.
+- Web counterpart
+  - schema migration and versioning tools
+
+6. System Map
+- Desktop function
+  - Visual or administrative mapping of system areas, routes, or infrastructure.
+- Web counterpart
+  - system map viewer
+  - area/route map integration
+
+7. Complaints
+- Desktop function
+  - Capture and manage customer complaints.
+- Web counterpart
+  - complaints ticketing module
+  - complaint tracking and resolution workflow
+
+Cross-Cutting Modules
+
+1. Audit Trail
+- Track all changes.
+- Store before-image, after-image, user, timestamp, and reason.
+
+2. Reconciliation
+- Compare desktop and web totals.
+- Detect drift in billing, collections, aging, disconnection, and reconnection.
+
+3. Duplicate Prevention
+- Prevent duplicate billing, payment, and transfer posting.
+
+4. Sync Queue
+- Queue offline changes.
+- Retry safely with idempotency.
+
+5. Rollback Handling
+- Keep rollback SQL or reversal logic for every write action.
+
+6. Accounting Integration
+- Export receivables, collections, adjustments, penalties, refunds, fees, and summaries.
+
+7. Financial Analytics Engine
+- Produce trend, variance, and exception analysis for billing and collections.
+- Support period-over-period comparisons.
+- Expose metrics for finance and management review.
+
+8. Complaints and Case Tracking
+- Track complaint status, assignment, response time, and resolution.
+- Connect complaint records to consumer accounts and field actions.
+
+9. System Map Integration
+- Link consumers, routes, areas, books, and service locations to map or topology views.
+- Support operational visualization for dispatch, route planning, and field follow-up.
+
+Special Account Families
+- Regular Consumer
+- BAPA Main
+- BAPA Individual
+- Net Metering
+- Lifeline
+- Senior
+- Disconnection
+- Reconnection
+
+Web Conversion Strategy
+1. Build shared core services.
+2. Convert login and mode selection.
+3. Convert master data and schedules.
+4. Convert billing and collections.
+5. Convert reports and logs.
+6. Add sync and device transfer.
+7. Add reconciliation and audit.
+8. Add accounting export.
+9. Stabilize and regression test.
+
+Desktop To Web Notes
+- Keep billing formulas in one shared engine.
+- Split only by account family or workflow rules.
+- Avoid duplicating calculations in multiple screens.
+- Make every write action previewable and reversible.
+
+End State
+- The web app should fully replicate the desktop app’s utility workflow.
+- All modules should be available in a browser or as API-backed web pages.
+- The platform should support future accounting integration without reworking billing math.

@@ -1,0 +1,142 @@
+UTILITY EXECUTION ROADMAP
+
+Purpose
+- Provide a practical build order for converting the desktop utility system into a coordinated desktop, web, and mobile platform.
+- Keep the work aligned with the master harmony plan, platform overview, module inventory, sync rules, and accounting plan.
+
+Build Sequence
+
+Phase 1: Shared Understanding
+1. Read utility_master_harmony_plan.txt.
+2. Read utility_platform_overview.txt.
+3. Read utility_module_inventory.txt.
+4. Confirm account families and special workflows:
+   - Regular Consumer
+   - BAPA Main
+   - BAPA Individual
+   - Net Metering
+   - Lifeline
+   - Senior
+   - Disconnection
+   - Reconnection
+
+Phase 2: Shared Contracts
+1. Define the canonical data contracts for:
+   - consumer
+   - account
+   - reading
+   - bill
+   - adjustment
+   - collection
+   - schedule
+   - disconnection
+   - reconnection
+   - complaint
+   - audit
+   - sync queue
+   - accounting entry
+2. Normalize field names and aliases from desktop, web, and mobile.
+3. Define stable transaction IDs and duplicate keys.
+
+Phase 3: Desktop Parity Analysis
+1. Inventory every desktop module and function.
+2. Map each screen to a web counterpart.
+3. Identify the exact desktop rules for:
+   - billing
+   - updates
+   - adjustments
+   - rates
+   - scheduling
+   - collections
+   - reports
+   - transfer
+   - complaints
+   - map references
+4. Record any ambiguous or conflicting fields.
+
+Phase 4: Web Core Build
+1. Build login and mode selection.
+2. Build master data pages.
+3. Build shared billing engine.
+4. Build bill preview and rollback workflow.
+5. Build collections and receipt posting.
+6. Build reports and logs.
+7. Build audit history and reconciliation views.
+
+Phase 5: Special Billing Families
+1. Implement regular consumer billing.
+2. Implement BAPA Main billing.
+3. Implement BAPA Individual billing.
+4. Implement net metering billing.
+5. Implement lifeline and senior overlays.
+6. Implement disconnection and reconnection workflows.
+
+Phase 6: Operational Modules
+1. Build scheduling.
+2. Build route monitoring.
+3. Build system map support.
+4. Build complaints tracking.
+5. Build financial analysis dashboards.
+6. Build late billing and adjustment workflows.
+
+Phase 7: Sync And Offline
+1. Build mobile offline queue handling.
+2. Add upload/download endpoints.
+3. Enforce idempotent retries.
+4. Block duplicate sync posts.
+5. Add conflict handling and reconciliation summaries.
+6. Sync reference data:
+   - rates
+   - schedules
+   - areas/books
+   - service grid
+   - routes
+   - complaint categories
+
+Phase 8: Accounting Integration
+1. Define the export contract.
+2. Map utility events to journal candidates.
+3. Add CSV export and/or API posting.
+4. Add reversal handling where supported.
+5. Reconcile accounting totals against utility totals.
+
+Phase 9: Testing And Validation
+1. Test desktop-to-web parity for:
+   - normal accounts
+   - BAPA main
+   - BAPA individual
+   - net metering
+   - lifeline
+   - senior
+   - collections
+   - disconnection
+   - reconnection
+2. Test mobile offline-to-web sync.
+3. Test duplicate prevention.
+4. Test preview and rollback paths.
+5. Test accounting export and reconciliation.
+
+Phase 10: Release And Rollout
+1. Freeze contract changes.
+2. Back up databases.
+3. Roll out read-only parity reports first.
+4. Roll out posting workflows second.
+5. Roll out sync and accounting integration last.
+6. Keep rollback procedure documented and ready.
+
+Task Ownership Guide
+- repository_analyzer
+  - module inventory, file tracing, desktop behavior extraction
+- solution_architect
+  - contracts, module boundaries, service design
+- integration_tester
+  - parity tests, sync tests, reconciliation tests
+- security_reviewer
+  - auth, rollback, audit, duplicate prevention
+- release_engineer
+  - rollout, backup, rollback, deployment order
+
+Implementation Rule
+- Never build a feature in isolation if it affects billing, sync, audit, or accounting.
+- Update the shared contract first, then implement desktop/web/mobile behavior against it.
+

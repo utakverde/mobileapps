@@ -1,0 +1,460 @@
+UTILITY WEB CONVERSION MASTER PLAN
+
+Purpose
+- Convert the full desktop utility application into a web-based utility platform.
+- Preserve billing calculations, operational workflows, reports, audit history, and reconciliation rules.
+- Keep BAPA, regular consumer billing, net metering, collections, disconnection, and reporting as distinct account/workflow families inside one shared platform.
+- Support future accounting system integration without changing the billing engine.
+
+Non-Negotiable Rules
+- Desktop behavior is the reference standard.
+- Web output must match desktop output for the same inputs.
+- Preserve existing billing calculations exactly.
+- No UI layer may own financial logic.
+- Every write action must support:
+  - preview SQL
+  - rollback SQL
+  - stable transaction identifiers
+  - idempotent uploads
+  - duplicate prevention
+  - audit history
+  - reconciliation
+- MySQL 5.5 compatibility must be preserved.
+
+Primary Skills
+- $multi-platform-team-workflow
+- $shared-contract-governance
+- $cross-platform-sync
+- $mysql55-safety
+
+Recommended Agent Roles
+- repository_analyzer
+  - Inventory desktop forms, logs, tables, and hidden dependencies.
+- solution_architect
+  - Define the web architecture, service boundaries, and migration phases.
+- integration_tester
+  - Verify desktop to web parity across account types and workflows.
+- security_reviewer
+  - Review authentication, audit, rollback, sync, and data exposure risks.
+- release_engineer
+  - Plan rollout, data backup, rollback, and deployment order.
+
+Desktop App Scope
+- Login and mode selection
+- User panel and role-based menus
+- Member services
+- Billing section
+- Finance section
+- Teller section
+- Data transfer
+- Reports center
+- Configuration and system administration
+
+Observed Login Modes
+- Regular Consumer
+- BAPA Main
+- BAPA Individual
+- Net Metering
+
+Observed Major Menus
+- Member Services
+  - Members Profile
+  - Billing Master
+  - Query Members
+  - Sequencing
+  - Route Monitoring
+- Billing Section
+  - Manual Posting
+  - Posting by Area
+  - BAPA Manual Posting
+  - BAPA Batch Printing
+  - BAPA Payment Posting
+  - Manual Posting Net Metering
+  - Flat Rate
+  - Other Charges
+  - Billing Register
+  - Billing Logs
+  - System Logs
+- Finance Section
+  - ERC and Tax Rates
+  - Reading Schedule
+  - Service Grid
+  - Bill Adjustment
+  - Late Billing
+  - Adjustment Report
+  - Late Billing Report
+- Teller Section
+  - Payment Collection
+  - Collection Report
+  - Collection by OR
+  - Collection by Bill
+  - Membership Bill Payments
+  - Non Power Bill Payments
+- Data Transfer
+  - Book List
+  - Upload to Device
+  - Download from Device
+  - Offline Download
+  - Upload Disconnection
+  - Download Paid Disco
+  - Offline Download Disco
+  - System Update
+  - XZ Device Reading
+- Reports Center
+  - Billing Register
+  - Sales by Area
+  - Over All Sales
+  - Sales by Ratecode
+  - Sales by Fees
+  - Sales by Rate
+  - Collection Sales
+  - Aging Analysis
+  - Aging Summary
+  - Unpaid Bills
+  - Consumer Data
+  - Collected UC
+  - VAT
+  - Collection
+  - MCC and Others
+  - Lifeline
+  - Batch Receipt
+- Configuration
+  - Configuration
+  - System Users
+  - Area/Book
+  - Service Grid
+  - Database Update
+
+System Families To Support
+- Regular consumer billing
+- BAPA main billing
+- BAPA individual billing
+- Net metering billing
+- Collections and receipts
+- Disconnection and reconnection
+- Rates and schedule management
+- Reports and audit
+- Offline sync and transfer
+- Accounting integration
+
+Target Web Architecture
+- Frontend
+  - Login and mode selection
+  - Dashboard by account family
+  - Billing pages
+  - Collections pages
+  - Schedule pages
+  - Reports pages
+  - Admin pages
+  - Audit and reconciliation pages
+- Backend
+  - PHP API with modular services
+  - MySQL 5.5 schema and procedures where needed
+  - Read-only reporting endpoints
+  - Safe write endpoints with preview and rollback support
+- Offline Layer
+  - Android SQLite
+  - queued sync transactions
+  - duplicate-safe upload
+  - retry-safe conflict handling
+- Accounting Layer
+  - posting/export interface for receivables, collections, adjustments, penalties, refunds, and summary entries
+
+Desktop-To-Web Mapping
+
+1. Login / Mode Selection
+- Desktop:
+  - User selects billing mode before entering the app.
+- Web:
+  - Login plus billing mode selector.
+  - Store the selected mode in session.
+  - Route the user to the correct menu set and report set.
+
+2. Member Services
+- Desktop:
+  - Member profile
+  - billing master
+  - query members
+  - sequencing
+  - route monitoring
+- Web:
+  - consumer directory
+  - account profile page
+  - searchable member lookup
+  - sequence management
+  - route monitoring dashboard
+
+3. Billing Section
+- Desktop:
+  - manual posting
+  - posting by area
+  - BAPA manual posting
+  - BAPA batch printing
+  - BAPA payment posting
+  - manual posting net metering
+  - flat rate
+  - other charges
+  - billing register
+  - logs
+- Web:
+  - billing create
+  - billing update
+  - bill preview
+  - bill adjustment
+  - batch print preview
+  - payment posting
+  - net metering posting
+  - flat rate posting
+  - other charge posting
+  - register and log views
+
+4. Finance Section
+- Desktop:
+  - rate tables
+  - reading schedule
+  - service grid
+  - bill adjustment
+  - late billing
+  - reports
+- Web:
+  - rate setup pages
+  - scheduling pages
+  - service grid administration
+  - adjustment workflow
+  - late billing workflow
+  - financial reference reports
+
+5. Teller Section
+- Desktop:
+  - payment collection
+  - OR-based search
+  - bill-based search
+  - membership payments
+  - non-power bill payments
+- Web:
+  - cashier collection module
+  - receipt posting
+  - payment lookup by OR or bill
+  - membership payment module
+  - miscellaneous charge payment module
+
+6. Data Transfer
+- Desktop:
+  - upload/download to device
+  - offline download
+  - disconnection transfer
+  - system update
+  - device reading
+- Web:
+  - sync queue
+  - import/export jobs
+  - reconciliation status
+  - device data endpoints
+  - duplicate-safe upload/download
+
+7. Reports Center
+- Desktop:
+  - sales
+  - aging
+  - unpaid
+  - collections
+  - VAT
+  - lifeline
+  - batch receipt
+- Web:
+  - same reports plus filtered drilldowns
+  - export to CSV, HTML, and Excel
+  - reconciliation and variance views
+
+8. Configuration
+- Desktop:
+  - users
+  - area/book
+  - service grid
+  - database update
+- Web:
+  - user and role administration
+  - area/book management
+  - service grid setup
+  - schema/config update workflow
+
+Required Shared Data Contracts
+- Consumer
+- Account
+- Reading
+- Bill
+- Bill Adjustment
+- Collection
+- Disconnection
+- Reconnection
+- Schedule
+- Rate
+- Audit Trail
+- Sync Queue
+- Accounting Entry
+
+Billing Families And Special Logic
+- Regular Consumer
+  - standard residential/commercial/industrial rules
+- BAPA Main
+  - shared BAPA billing logic with main account grouping
+- BAPA Individual
+  - shared BAPA billing logic with individual member/account grouping
+- Net Metering
+  - import/export kWh handling
+  - `GrossKilowattHour`
+  - `LessKilowattHour`
+  - export credit rules
+- Lifeline
+  - lifeline eligibility and discount fields
+- Senior
+  - senior discount and subsidy fields
+- Disconnection / Reconnection
+  - monthly operational reporting
+  - duplicate-safe event posting
+
+Preview / Rollback Requirements
+- Any write action must first produce a preview record.
+- Preview must show before-image, after-image, and reason.
+- Apply must use stable transaction IDs.
+- Rollback must restore original values using stored rollback SQL.
+- Status values should include preview, applied, rolled_back, failed, and rollback_failed.
+
+Duplicate Prevention Rules
+- Enforce unique keys by:
+  - source system
+  - account number
+  - bill month
+  - record type
+  - operation type
+  - OR number or source-side sequence where applicable
+- Reject duplicate uploads and duplicate posting requests.
+- Make sync retries idempotent.
+
+Reconciliation Requirements
+- Compare desktop and web totals for:
+  - billing
+  - kWh
+  - collections
+  - aging
+  - disconnection
+  - reconnection
+  - new connections
+  - lifeline
+  - senior
+  - net metering
+- Track drift by account, bill month, area, and book.
+- Flag mismatches for manual review.
+
+Accounting Integration Scope
+- Do not replace the billing engine with accounting logic.
+- Expose an export/posting interface for:
+  - receivables
+  - collections
+  - adjustments
+  - refunds
+  - penalties
+  - reconnect fees
+  - disconnect fees
+  - miscellaneous charges
+- Support future integration with accounting systems via:
+  - CSV export
+  - API posting endpoint
+  - journal entry mapping
+  - summary totals by billing period
+
+Recommended Implementation Order
+1. Inventory desktop modules and tables.
+2. Define shared contracts and stable transaction IDs.
+3. Build read-only parity reports.
+4. Implement preview and rollback for write actions.
+5. Convert billing, collections, and reports.
+6. Add disconnection, reconnection, and scheduling.
+7. Add offline sync and duplicate prevention.
+8. Add audit and reconciliation views.
+9. Add accounting export hooks.
+10. Perform regression testing and rollout.
+
+Verification Checklist
+- Login mode routes correctly.
+- Regular consumer billing matches desktop.
+- BAPA main billing matches desktop.
+- BAPA individual billing matches desktop.
+- Net metering output matches desktop.
+- Collections and receipts match desktop totals.
+- Scheduling produces the same dates and sequences.
+- Reports match desktop totals.
+- Preview and rollback work for every write action.
+- Duplicate uploads and duplicate postings are blocked.
+- Audit history is complete.
+- Accounting export is possible without affecting billing math.
+
+Agent Prompt Templates
+
+Prompt A: Desktop Analysis
+Use $multi-platform-team-workflow and $shared-contract-governance.
+
+Spawn repository_analyzer, solution_architect, integration_tester, security_reviewer, and release_engineer.
+Analyze the desktop utility system and produce:
+- module inventory
+- screen inventory
+- tables used
+- account families
+- data contracts
+- risks of contract drift
+- calculations that must remain unchanged
+
+Prompt B: Web Conversion Design
+Use $multi-platform-team-workflow, $shared-contract-governance, and $mysql55-safety.
+
+Design the web conversion for the full utility system.
+Preserve desktop billing calculations.
+Define:
+- login and mode selection
+- billing modules
+- collections modules
+- scheduling modules
+- reports modules
+- configuration modules
+- audit and reconciliation modules
+- accounting export interface
+
+Prompt C: Sync Design
+Use $cross-platform-sync and $mysql55-safety.
+
+Design offline SQLite sync and import/export for readings, bills, collections, disconnections, and reconnections.
+Define:
+- stable transaction IDs
+- duplicate prevention
+- retry-safe upload
+- conflict handling
+- reconciliation summary
+
+Prompt D: Billing Safety
+Use $shared-contract-governance and $mysql55-safety.
+
+Implement bill creation, bill update, and bill adjustment with:
+- preview SQL
+- rollback SQL
+- audit history
+- duplicate prevention
+- independent validation before posting
+
+Prompt E: Accounting Integration
+Use $multi-platform-team-workflow.
+
+Design optional accounting integration for receivables, collections, adjustments, penalties, refunds, and summary posting.
+Keep the billing system as the source of truth.
+
+Agent Guidance
+- repository_analyzer
+  - First choice for module and schema inventory.
+- solution_architect
+  - First choice for conversion plan and system boundaries.
+- integration_tester
+  - First choice for desktop-to-web parity checks.
+- security_reviewer
+  - First choice for audit, rollback, sync, and auth review.
+- release_engineer
+  - First choice for rollout and rollback strategy.
+

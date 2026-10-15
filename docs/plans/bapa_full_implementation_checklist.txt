@@ -1,0 +1,180 @@
+BAPA FULL IMPLEMENTATION CHECKLIST
+
+Goal
+- Recreate the entire desktop utility collection and billing system in web form.
+- Preserve desktop behavior, calculations, and data contracts.
+- Support billing, collections, scheduling, audit, reconciliation, and optional accounting integration.
+
+System Scope
+- Consumer onboarding
+- New connection processing
+- Rate setup and maintenance
+- Scheduling and billing cycles
+- Meter reading import and export
+- Bill generation and reprinting
+- Bill updates and bill adjustments
+- Collections and receipts
+- Disconnection and reconnection
+- Lifeline and senior discounts
+- Net metering
+- Reports and summaries
+- Audit history
+- Reconciliation
+- Sync and duplicate prevention
+- Optional accounting integration
+
+Reference Rules
+- Desktop behavior is the source of truth.
+- Web implementation must match desktop outputs for the same inputs.
+- Preserve existing billing calculations.
+- Do not merge UI and calculation logic.
+- Every write action must support:
+  - preview
+  - approval
+  - rollback
+  - audit trail
+  - idempotent transaction key
+
+Module Checklist
+
+1. New Consumer / New Connection
+- Create consumer records.
+- Assign area, book, rate class, and service status.
+- Capture service date, meter data, and account metadata.
+- Validate duplicate consumers before insert.
+- Generate a stable new-connection transaction ID.
+
+2. Rates
+- Store all rate tables and effective dates.
+- Support residential, commercial, BAPA, lifeline, senior, net metering, and special classes.
+- Preserve desktop rate formulas and charge components.
+- Record rate version history.
+- Add preview and rollback for rate updates.
+
+3. Scheduling
+- Store bill cycle schedule, reading schedule, and disconnection schedule.
+- Support due date and disconnection date generation.
+- Prevent duplicate schedule rows by cycle and month.
+- Keep schedule history for audit and reconciliation.
+
+4. Meter Reading
+- Accept new reading entries and updates.
+- Validate previous and present readings.
+- Recompute kWh using the same desktop rules.
+- Support offline upload and duplicate rejection.
+
+5. Bill Creation
+- Compute all charges using the desktop logic.
+- Show preview before posting.
+- Store bill transaction ID.
+- Save before/after values.
+- Require rollback SQL.
+
+6. Bill Update / Adjustment
+- Recompute the bill using the same calculation path as bill creation.
+- Preserve original values in audit history.
+- Store adjustment reason and reference.
+- Prevent double-adjustment.
+- Generate rollback SQL that restores the original record.
+
+7. Collections
+- Support payments, receipts, OR numbers, and collection posting.
+- Track paid vs unpaid status.
+- Validate duplicate OR numbers.
+- Store collection transaction IDs.
+
+8. Disconnection
+- Create disconnection list and confirmation workflow.
+- Track notices, dates, and status.
+- Support disconnection audit trail.
+- Keep reconciliation counts for monthly totals.
+
+9. Reconnection
+- Track reconnection events and billing recovery.
+- Store reconnection dates and status.
+- Prevent duplicate reconnection posting.
+
+10. Lifeline and Senior
+- Preserve existing lifeline and senior discount rules.
+- Normalize field names from desktop and mobile sources.
+- Report discounts separately from the base bill.
+- Audit mismatched or missing discount data.
+
+11. Net Metering
+- Preserve import/export handling.
+- Separate incoming consumption from export credit.
+- Keep `GrossKilowattHour` and `LessKilowattHour` logic intact.
+- Validate against desktop `billhistory_net` output.
+
+12. Reports
+- Sales summary by month, area, and book.
+- Sales by rate and by consumer type.
+- Collections summary.
+- Aging summary.
+- Disconnection and reconnection summary.
+- New connection summary.
+- Lifeline and senior discount summary.
+- kWh anomaly report.
+- Adjustment and discrepancy report.
+
+13. Audit Trail
+- Record who changed what, when, and why.
+- Store current row, proposed row, and rollback row.
+- Keep transaction IDs stable across retries.
+- Make audit history searchable by account and bill month.
+
+14. Reconciliation
+- Compare desktop and web totals.
+- Compare sales, kWh, collections, aging, disconnection, reconnection, and discounts.
+- Flag unexplained drift.
+- Require manual review for mismatched financial totals.
+
+15. Sync
+- Queue offline changes.
+- Upload with idempotency keys.
+- Reject duplicate uploads.
+- Support retry after network failure.
+- Mark sync status clearly.
+
+16. Accounting Integration
+- Export posting entries in an accounting-friendly format.
+- Keep the billing system as the source of truth.
+- Map collections, adjustments, refunds, receivables, and penalties to accounting categories.
+- Add a clear interface for later integration with accounting software.
+
+Required Database Concepts
+- Stable transaction ID
+- Source system identifier
+- Account number
+- Bill month
+- Record type
+- Operation type
+- Before image
+- After image
+- Rollback SQL
+- Sync status
+- Audit status
+- Duplicate key
+
+Implementation Order
+1. Schema and contract mapping
+2. Desktop-to-web module inventory
+3. Shared calculation engine
+4. Read-only parity reports
+5. Preview and rollback workflows
+6. Collections and adjustments
+7. Scheduling and disconnection/reconnection
+8. Audit and reconciliation
+9. Sync and duplicate prevention
+10. Accounting export hooks
+11. Full regression testing
+12. Deployment and rollback plan
+
+Acceptance Criteria
+- All desktop modules have a web counterpart.
+- Billing outputs match desktop for sample accounts.
+- Write actions can be previewed and rolled back.
+- Duplicate uploads are blocked.
+- Audit history is complete.
+- Accounting export is possible without changing core billing math.
+

@@ -1,0 +1,74 @@
+UTILITY PLATFORM OVERVIEW
+
+Purpose
+- Provide a one-page reference for the full utility platform across desktop, web, and Android mobile.
+- Tie the module inventory, web conversion, accounting, finance/map/complaints, and mobile sync plans into one shared picture.
+
+Platforms
+
+1. Desktop Utility
+- Source of truth for current business behavior.
+- Includes billing, collections, operations, reporting, configuration, and transfers.
+- Supports BAPA, regular consumer, net metering, and special account workflows.
+
+2. Web Platform
+- Central browser-based system.
+- Handles billing, collections, adjustments, reports, audit, reconciliation, and accounting export.
+- Uses preview and rollback for all write actions.
+
+3. Android Mobile App
+- Offline-first field client.
+- Handles readings, collections, disconnection, reconnection, complaints, and reference-data sync.
+- Uploads idempotently to the web platform.
+
+Shared Principles
+- One billing engine.
+- One shared contract model.
+- One audit and reconciliation model.
+- One duplicate-prevention model.
+- One approval and rollback model.
+- One sync strategy across all platforms.
+
+Major System Families
+- Identity and access
+- Master data
+- Billing
+- Collections
+- Scheduling
+- Operations
+- Reports
+- Audit and reconciliation
+- Financial analysis
+- System map
+- Complaints
+- Accounting integration
+- Mobile sync
+
+Important Account Families
+- Regular Consumer
+- BAPA Main
+- BAPA Individual
+- Net Metering
+- Lifeline
+- Senior
+- Disconnection
+- Reconnection
+
+Module Relationship Summary
+- Desktop modules define the current behavior.
+- Web modules recreate and extend the behavior in browser form.
+- Mobile modules handle offline field actions and sync back to the shared core.
+- Accounting integration consumes approved results from the shared core.
+
+Work Order
+1. Read the master harmony plan.
+2. Read the module inventory.
+3. Read the platform overview.
+4. Read the implementation checklist.
+5. Read the specialized plans for accounting, finance/map/complaints, and mobile sync.
+6. Use the prompt pack and BAPA-specific plans only when needed.
+
+Development Rule
+- Do not let one platform drift away from the others.
+- If a field, rule, or workflow changes in one place, update the shared contract and audit/reconciliation plan.
+
