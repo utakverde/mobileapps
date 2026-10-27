@@ -22,6 +22,7 @@ node_modules/
 android/app/build/
 android/build/
 dist/
+.gradle-temp/
 
 # Local signing/runtime artifacts
 android/app/debug.keystore
