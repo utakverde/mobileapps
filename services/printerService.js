@@ -59,6 +59,13 @@ function twoCol(label, value, width = PRINT_WIDTH) {
   return `${left.padEnd(width - right.length, ' ')}${right}`;
 }
 
+function flexibleCol(label, value, width = PRINT_WIDTH) {
+  const right = String(value ?? '');
+  const available = Math.max(0, width - right.length - 1);
+  const left = String(label).slice(0, available);
+  return `${left.padEnd(width - right.length, ' ')}${right}`;
+}
+
 function center(value, width = PRINT_WIDTH) {
   const text = String(value ?? '').slice(0, width);
   return text.padStart(Math.floor((width + text.length) / 2), ' ');
@@ -152,36 +159,6 @@ function rateAmountLine(label, rate, amount) {
   return `${name}${rateText}${amountText}`;
 }
 
-function chargeLine(label, rate, amount) {
-  const name = String(label).slice(0, 18).padEnd(18, ' ');
-  const rateText = money(rate).slice(0, 8).padStart(8, ' ');
-  const amountText = money(amount).slice(0, 12).padStart(12, ' ');
-  return `${name}${rateText}${amountText}`;
-}
-
-function sectionRows(title, items = []) {
-  const rows = [title, 'CHARGES           RATE/KWH        AMT'];
-  items.forEach((item) => {
-    rows.push(chargeLine(labelForField(item.field), item.rate, item.amount));
-  });
-  rows.push('------------------------------');
-  rows.push(line('Sub-Total:', `P${money(items.reduce((sum, item) => sum + Number(item.amount || 0), 0))}`));
-  return rows;
-}
-
-function labelForField(field = '') {
-  return String(field)
-    .replace(/^Rate_/i, '')
-    .replace(/^Vat_/i, 'VAT ')
-    .replace(/^EVAT_/i, 'VAT ')
-    .replace(/Charge$/i, '')
-    .replace(/Sys/i, ' Sys')
-    .replace(/Trans/i, ' Trans')
-    .replace(/Dist/i, ' Dist')
-    .replace(/_/g, ' ')
-    .trim();
-}
-
 function sourceAmount(bill, fields) {
   return num(firstValue(bill, fields, 0));
 }
@@ -227,14 +204,172 @@ function sourceItem(label, reading, bill, rateFields, amountFields, fallbackAmou
   };
 }
 
-function sourceSection(title, items) {
-  const visible = items;
-  if (visible.length === 0) return [];
+function groupedSourceSection(title, groups) {
   const rows = [boldText(title), 'Rate Components            Rate   Amount'];
-  visible.forEach((item) => rows.push(rateAmountLine(item.label, item.rate, item.amount)));
+  groups.forEach((group) => {
+    if (group.title) rows.push(boldText(`  ${group.title}`));
+    group.items.forEach((item) => {
+      const label = `  ${item.label}`;
+      if (label.length <= 23) {
+        rows.push(rateAmountLine(label, item.rate, item.amount));
+      } else {
+        rows.push(...wrapText(label, PRINT_WIDTH));
+        rows.push(rateAmountLine('', item.rate, item.amount));
+      }
+    });
+  });
   rows.push(SEP);
-  rows.push(twoCol('Sub Total', money(visible.reduce((sum, item) => sum + item.amount, 0))));
   return rows;
+}
+
+function computedBreakdownItem(invoice, label, fields) {
+  const item = Object.values(invoice.breakdown || {})
+    .flatMap((value) => (Array.isArray(value) ? value : []))
+    .find((candidate) => fields.includes(candidate.field));
+  return { label, rate: num(item?.rate), amount: num(item?.amount) };
+}
+
+function newFormatGroups(item) {
+  return [
+    {
+      title: 'Generation and Transmission Charges',
+      groups: [
+        { title: 'Generation Charges', items: [
+          item('Generation Charge', ['Rate_GenSysCharge'], ['GenSysCharge']),
+          item('Power Act Reduction', ['Rate_PowerActRateRed'], ['PowerActRateRed']),
+          item('SAGR Adjustment', ['Rate_SAGRAdjustment', 'Rate_SAGR'], ['SAGRAdjustment', 'SAGR']),
+        ] },
+        { title: 'Transmission Charges', items: [
+          item('Transmission System Charge', ['Rate_TCTransSystemCharge'], ['TCTransSystemCharge']),
+          item('Transmission Demand Charge', ['Rate_TCDemandCharge'], ['TCDemandCharge']),
+        ] },
+        { title: 'Ancillary Charges', items: [
+          item('Ancillary Charge', ['Rate_AncillaryCharge', 'Rate_Ancillary'], ['AncillaryCharge']),
+          item('Ancillary Demand', ['Rate_AncillaryDemandCharge'], ['AncillaryDemandCharge']),
+        ] },
+      ],
+    },
+    {
+      title: 'Distribution Revenue',
+      groups: [
+        { title: 'Distribution Revenue', items: [
+          item('Distribution System', ['Rate_DCDistributionCharge'], ['DCDistributionCharge']),
+          item('Distribution Demand', ['Rate_DCDemandCharge'], ['DCDemandCharge']),
+        ] },
+        { title: 'Supply Charges', items: [
+          item('Fixed Supply Charge', ['Rate_SCRetCustCharge'], ['SCRetCustCharge']),
+          item('Supply System Charge', ['Rate_SCSupplySysCharge'], ['SCSupplySysCharge']),
+        ] },
+        { title: 'Metering Charge', items: [
+          item('Fixed Metering Charge', ['Rate_MCRetailCustCharge'], ['MCRetailCustCharge']),
+          item('Metering Charge', ['Rate_MCSystemCharge'], ['MCSystemCharge']),
+        ] },
+      ],
+    },
+    {
+      title: 'Other Charges',
+      groups: [{ items: [
+        item('RFSC', ['Rate_MCC'], ['MCC']),
+        item('Other MCC', ['Rate_MCC_Substation'], ['MCC_Substation']),
+      ] }],
+    },
+    {
+      title: 'Government Charges',
+      groups: [
+        { title: 'Value Added Tax (VAT)', items: [
+          item('Generation', ['Vat_GenCharge'], ['EVAT_GenCharge', 'Vat_GenCharge']),
+          item('Power Act Reduction', ['Vat_PowerActRateRed'], ['EVAT_PowerActRateRed']),
+          item('Transmission', ['Vat_Trans_Charge'], ['EVAT_Trans_Charge', 'Vat_Trans_Charge']),
+          item('Ancillary Service', ['Vat_Ancillary'], ['EVAT_Ancillary']),
+          item('Distribution', ['Vat_Dist_Charge'], ['EVAT_Dist_Charge', 'Vat_Dist_Charge']),
+          item('Others', ['Vat_Other'], ['EVAT_OtherVat', 'Vat_Other']),
+        ] },
+        { title: 'Pass-Through Taxes', items: [
+          item('Energy Tax', ['Rate_EnergyTax'], ['EnergyTax']),
+          item('Real Property Tax', ['Rate_RealPropertyTax'], ['RealPropertyTax']),
+          item('Business Tax', ['Rate_BusinessTax'], ['BusinessTax']),
+          item('Local Franchise Tax', ['Rate_FranchiseTax'], ['FranchiseTax']),
+        ] },
+      ],
+    },
+    {
+      title: 'Government Mandated Pass Through Charges',
+      groups: [
+        { items: [
+          item('Allowable System Loss', ['Rate_SystemLossCharge'], ['SystemLossCharge']),
+          item('Lifeline Rate Subsidy/Discount', ['Rate_LifelineDiscSubs', 'Rate_LifelineCollect'], ['LifelineDiscSubs', 'LifelineCollect']),
+          item('Senior Citizen Subsidy/Discount', ['Rate_SeniorSubsidy', 'senior_citizen'], ['senior_citizen_subsidy', 'senior_citizen_disc']),
+        ] },
+        { title: 'Universal Charges', items: [
+          item('NPC Stranded Debts', ['Rate_UCNPCStrandedDebts'], ['UCNPCStrandedDebts']),
+          item('NPC Stranded Cost', ['Rate_UCNPCStrandedContCost'], ['UCNPCStrandedContCost']),
+          item('DUs Stranded Cost', ['Rate_UCDUStrandedContCost'], ['UCDUStrandedContCost']),
+          item('Missionary Electrification NPC SPUG', ['Rate_UCME'], ['UCME']),
+          item('Missionary Electrification - REDCI', ['Rate_UCME_Redci'], ['UCME_Redci']),
+          item('Environmental Charges', ['Rate_UCEC'], ['UCEC']),
+          item('Equalization of taxes and royalty', ['Rate_UCEqTaxesAndRoyalties'], ['UCEqTaxesAndRoyalties']),
+        ] },
+        { items: [
+          item('FIT-All', ['Rate_FitAll'], ['FitAll']),
+          item('REC Rate', ['RATE_REX', 'Rate_REX'], ['REX']),
+          item('GEA-All', ['RATE_GEA_ALL', 'Rate_GEA_ALL'], ['GEA_ALL']),
+        ] },
+      ],
+    },
+  ];
+}
+
+function newFormatActualRows(reading, bill) {
+  const groups = newFormatGroups((label, rateFields, amountFields) => {
+    if (label === 'Lifeline Rate Subsidy/Discount' || label === 'Senior Citizen Subsidy/Discount') {
+      return {
+        label,
+        rate: 0,
+        amount: amountFields.reduce((sum, field) => sum + sourceAmount(bill, [field]), 0),
+      };
+    }
+    return sourceItem(label, reading, bill, rateFields, amountFields);
+  });
+  const otherSection = groups.find((section) => section.title === 'Other Charges');
+  Array.from({ length: 10 }, (_, index) => index + 1).forEach((number) => {
+    const amount = sourceAmount(bill, [`OCAmount${number}`, `OCTotal${number}`]);
+    if (amount === 0) return;
+    const label = firstValue(reading, [`OCCode${number}`], firstValue(bill, [`OCCode${number}`], `Other Charge ${number}`));
+    otherSection.groups[0].items.push({
+      label: String(label || `Other Charge ${number}`),
+      rate: num(firstValue(reading, [`OCRate${number}`, `Rate_OC${number}`], firstValue(bill, [`OCRate${number}`, `Rate_OC${number}`], 0))),
+      amount,
+    });
+  });
+  return groups.flatMap((section) => groupedSourceSection(section.title, section.groups));
+}
+
+function newFormatComputedRows(invoice) {
+  const p = invoice.printableInvoice || invoice;
+  const groups = newFormatGroups((label, rateFields, amountFields) => {
+    if (label === 'Lifeline Rate Subsidy/Discount') {
+      return { label, rate: 0, amount: num(p.lifelineDiscount) };
+    }
+    if (label === 'Senior Citizen Subsidy/Discount') {
+      return { label, rate: 0, amount: num(p.seniorDiscount) };
+    }
+    return computedBreakdownItem(invoice, label, [...rateFields, ...amountFields]);
+  });
+  const otherSection = groups.find((section) => section.title === 'Other Charges');
+  (invoice.breakdown?.otherCharges || []).forEach((charge, index) => {
+    if (num(charge.amount) === 0) return;
+    otherSection.groups[0].items.push({
+      label: charge.label || labelForOtherCharge(charge.field, index),
+      rate: num(charge.rate),
+      amount: num(charge.amount),
+    });
+  });
+  return groups.flatMap((section) => groupedSourceSection(section.title, section.groups));
+}
+
+function labelForOtherCharge(field, index) {
+  const match = String(field || '').match(/(\d+)$/);
+  return `Other Charge ${match?.[1] || index + 1}`;
 }
 
 function arrearsRows(invoice) {
@@ -245,6 +380,67 @@ function arrearsRows(invoice) {
   }));
   if (fromArrears.length > 0) return fromArrears;
   return sources.readingBreakdown || [];
+}
+
+function invoiceSummaryValues(invoice) {
+  const p = invoice.printableInvoice || invoice;
+  const bill = invoice.printSources?.billhistory || {};
+  const reading = invoice.printSources?.reading || {};
+  const currentBill = num(bill.TotalBill ?? p.totalBill);
+  const subTotal = num(p.totalBeforeDiscount ?? bill.TotalBeforeDiscount ?? currentBill);
+  const arrears = arrearsRows(invoice);
+  const arrearsTotal = roundMoney(
+    arrears.length > 0
+      ? arrears.reduce((sum, row) => sum + num(row.amount), 0)
+      : num(p.arrearsTotal)
+  );
+  const surchargeEnabled = isTruthyFlag(
+    p.flagSurcharge ?? p.flag_surcharge ?? bill.flag_surcharge ?? reading.flag_surcharge
+  );
+  const latePaymentCharge = surchargeEnabled
+    ? roundMoney(Math.max(0, num(firstValue(p, [
+        'surchargeAmount',
+        'surcharge_amount',
+        'latePaymentCharge',
+        'late_payment_charge',
+        'LatePaymentCharge',
+      ], firstValue(bill, ['surcharge_amount'], firstValue(reading, ['surcharge_amount'], 0))))))
+    : 0;
+  const amountDue = roundMoney(currentBill + arrearsTotal);
+
+  return {
+    subTotal,
+    currentBill,
+    arrears,
+    arrearsTotal,
+    latePaymentCharge,
+    amountDue,
+    amountAfterDueDate: roundMoney(amountDue + latePaymentCharge),
+  };
+}
+
+function invoiceSummaryRows(invoice, dueDate, disconnectionDate) {
+  const summary = invoiceSummaryValues(invoice);
+  const rows = [
+    flexibleCol('SUB TOTAL', money(summary.subTotal)),
+    flexibleCol('TOTAL CURRENT BILL', `Php ${money(summary.currentBill)}`),
+    flexibleCol('ARREARS', money(summary.arrearsTotal)),
+  ];
+
+  summary.arrears.forEach((row) => {
+    rows.push(`${String(row.billMonth || 'Arrears').padStart(20, ' ')} - ${money(row.amount)}`);
+  });
+
+  rows.push(
+    SEP,
+    largeBoldText(flexibleCol('TOTAL AMOUNT DUE', `Php ${money(summary.amountDue)}`)),
+    flexibleCol('LATE PAYMENT CHARGE AFTER DUE DATE:', money(summary.latePaymentCharge)),
+    largeBoldText(flexibleCol('TOTAL AMOUNT AFTER DUE DATE', `Php ${money(summary.amountAfterDueDate)}`)),
+    flexibleCol('DUE DATE (Current billing)', dueDate || ''),
+    flexibleCol('DISCO DATE (Current billing)', disconnectionDate || ''),
+  );
+
+  return rows;
 }
 
 function printMetaRows(meta = {}, fallbackAccn = '') {
@@ -315,9 +511,7 @@ function invoiceFooterRows(invoice, options = {}) {
   const bill = invoice.printSources?.billhistory || {};
   const accountNumber = p.accountNumber || bill.AccountNumber || '';
   const billMonth = p.billMonth || bill.BillMonth || '';
-  const currentBill = num(bill.TotalBill ?? p.totalBill);
-  const arrearsTotal = arrearsRows(invoice).reduce((sum, row) => sum + num(row.amount), 0);
-  const totalBill = roundMoney(currentBill + arrearsTotal);
+  const totalBill = invoiceSummaryValues(invoice).amountDue;
   const rows = [
     ...wrapText('Payment of this bill does not mean payment of previous delinquencies, if any.', PRINT_WIDTH),
     center('A 10 day grace period is allowed'),
@@ -331,36 +525,11 @@ function invoiceFooterRows(invoice, options = {}) {
   return rows;
 }
 
-function otherChargeItems(reading, bill) {
-  return Array.from({ length: 10 }, (_, index) => {
-    const number = index + 1;
-    const code = firstValue(reading, [`OCCode${number}`], firstValue(bill, [`OCCode${number}`], `OC ${number}`));
-    return sourceItem(
-      String(code || `Other Charge ${number}`),
-      reading,
-      bill,
-      [`OCRate${number}`, `Rate_OC${number}`],
-      [`OCAmount${number}`, `OCTotal${number}`],
-      reading[`OCAmount${number}`]
-    );
-  });
-}
-
-function flatSourceItems(reading, bill, definitions) {
-  return definitions.map((item) =>
-    sourceItem(item.label, reading, bill, item.rateFields || [], item.amountFields || [], item.fallbackAmount || 0)
-  );
-}
-
 function createActualInvoicePrintText(invoice, options = {}) {
   const p = invoice.printableInvoice || invoice;
   const reading = invoice.printSources?.reading || {};
   const bill = invoice.printSources?.billhistory || {};
   const kwh = num(bill.KilowattHour ?? bill.Diff ?? p.computedKwh);
-  const currentBill = num(bill.TotalBill ?? p.totalBill);
-  const arrears = arrearsRows(invoice);
-  const arrearsTotal = arrears.reduce((sum, row) => sum + num(row.amount), 0);
-  const totalBill = roundMoney(currentBill + arrearsTotal);
   const birSummary = birSalesSummary(reading, bill, p);
 
   const readingRows = [
@@ -404,94 +573,15 @@ function createActualInvoicePrintText(invoice, options = {}) {
 
   rows.push(largeBoldText(center('UNBUNDLED RATES')));
 
-  rows.push(
-    ...sourceSection(
-      'Generation and Transmission',
-      flatSourceItems(reading, bill, [
-        { label: 'Generation Energy Charge', rateFields: ['Rate_GenSysCharge'], amountFields: ['GenSysCharge'] },
-        { label: 'Power Act Reduction', rateFields: ['Rate_PowerActRateRed'], amountFields: ['PowerActRateRed'] },
-        { label: 'Transmission Demand Charge', rateFields: ['Rate_TCDemandCharge'], amountFields: ['TCDemandCharge'] },
-        { label: 'Transmission Energy Charge', rateFields: ['Rate_TCTransSystemCharge'], amountFields: ['TCTransSystemCharge'] },
-        { label: 'System Loss Charge', rateFields: ['Rate_SystemLossCharge'], amountFields: ['SystemLossCharge'] },
-      ])
-    )
-  );
-
-  rows.push(
-    ...sourceSection(
-      'Distribution Revenues',
-      flatSourceItems(reading, bill, [
-        { label: 'Distribution Demand Charge', rateFields: ['Rate_DCDemandCharge'], amountFields: ['DCDemandCharge'] },
-        { label: 'Distribution Energy Charge', rateFields: ['Rate_DCDistributionCharge'], amountFields: ['DCDistributionCharge'] },
-        { label: 'Supply Energy Charge', rateFields: ['Rate_SCSupplySysCharge'], amountFields: ['SCSupplySysCharge'] },
-        { label: 'Supply Retail Cust. Charge', rateFields: ['Rate_SCRetCustCharge'], amountFields: ['SCRetCustCharge'] },
-        { label: 'Metering Energy Charge', rateFields: ['Rate_MCSystemCharge'], amountFields: ['MCSystemCharge'] },
-        { label: 'Metering Retail Cust. Chrg', rateFields: ['Rate_MCRetailCustCharge'], amountFields: ['MCRetailCustCharge'] },
-        { label: 'RFSC', rateFields: ['Rate_MCC'], amountFields: ['MCC'] },
-        { label: 'CAPEX (RFSC)', rateFields: ['Rate_MCC_Substation'], amountFields: ['MCC_Substation'] },
-      ])
-    )
-  );
-
-  rows.push(
-    ...sourceSection('Others', [
-      ...otherChargeItems(reading, bill),
-      ...flatSourceItems(reading, bill, [
-        { label: 'Lifeline Subsidy/Disc.', rateFields: ['Rate_LifelineDiscSubs'], amountFields: ['LifelineDiscSubs'] },
-        { label: 'Lifeline Collect', rateFields: ['Rate_LifelineCollect'], amountFields: ['LifelineCollect'] },
-        { label: 'Senior Citizen 5% Disc.', rateFields: ['senior_citizen'], amountFields: ['senior_citizen_disc'] },
-        { label: 'Senior Citizen Subsidy', rateFields: ['Rate_SeniorSubsidy'], amountFields: ['senior_citizen_subsidy'] },
-        { label: 'RPPD', rateFields: ['Rate_RPPD'], amountFields: ['RPPD'] },
-        { label: 'ICCS', rateFields: ['Rate_ICCS'], amountFields: ['ICCS'] },
-        { label: 'Franchise Tax', rateFields: ['Rate_FranchiseTax'], amountFields: ['FranchiseTax'] },
-        { label: 'Real Property Tax', rateFields: ['Rate_RealPropertyTax'], amountFields: ['RealPropertyTax'] },
-        { label: 'RECs', rateFields: ['RATE_REX', 'Rate_REX'], amountFields: ['REX'] },
-      ]),
-    ])
-  );
-
-  rows.push(
-    ...sourceSection(
-      'Government Revenues',
-      flatSourceItems(reading, bill, [
-        { label: 'Generation', rateFields: ['Vat_GenCharge'], amountFields: ['EVAT_GenCharge', 'Vat_GenCharge'] },
-        { label: 'Transmission', rateFields: ['Vat_Trans_Charge'], amountFields: ['EVAT_Trans_Charge', 'Vat_Trans_Charge'] },
-        { label: 'System Loss', rateFields: ['Vat_SystemLoss'], amountFields: ['EVAT_SystemLoss', 'Vat_SystemLoss'] },
-        { label: 'Distribution', rateFields: ['Vat_Dist_Charge'], amountFields: ['EVAT_Dist_Charge', 'Vat_Dist_Charge'] },
-        { label: 'Others', rateFields: ['Vat_Other'], amountFields: ['EVAT_OtherVat', 'Vat_Other'] },
-      ])
-    )
-  );
-
-  rows.push(
-    ...sourceSection(
-      'Universal Charge',
-      flatSourceItems(reading, bill, [
-        { label: 'NPC Stranded Debt', rateFields: ['Rate_UCNPCStrandedDebts'], amountFields: ['UCNPCStrandedDebts'] },
-        { label: 'NPC Stranded Cost', rateFields: ['Rate_UCNPCStrandedContCost'], amountFields: ['UCNPCStrandedContCost'] },
-        { label: 'Missionary Elect.', rateFields: ['Rate_UCME'], amountFields: ['UCME'] },
-        { label: 'Missionary (RED-CI)', rateFields: ['Rate_UCME_Redci'], amountFields: ['UCME_Redci'] },
-        { label: 'Environmental', rateFields: ['Rate_UCEC'], amountFields: ['UCEC'] },
-        { label: 'FIT-All', rateFields: ['Rate_FitAll'], amountFields: ['FitAll'] },
-        { label: 'GEA-ALL', rateFields: ['RATE_GEA_ALL', 'Rate_GEA_ALL'], amountFields: ['GEA_ALL'] },
-      ])
-    )
-  );
+  rows.push(...newFormatActualRows(reading, bill));
 
   rows.push(
     DOUBLE_SEP,
-    twoCol('Bill Amount', money(currentBill)),
-    ''
-  );
-
-  if (arrears.length > 0) {
-    rows.push(twoCol('Arrears Amount', money(arrearsTotal)));
-    arrears.forEach((row) => rows.push(`${String(row.billMonth || 'Arrears').padStart(20, ' ')} - ${money(row.amount)}`));
-    rows.push('');
-  }
-
-  rows.push(
-    largeBoldText(twoCol('Total Bill', money(totalBill))),
+    ...invoiceSummaryRows(
+      invoice,
+      p.dueDate || firstValue(reading, ['Sched_DueDate']),
+      p.disconnectionDate || firstValue(reading, ['Sched_DisconnectionDate'])
+    ),
     '',
     twoCol('VATABLE SALES', money(birSummary.vatableSales)),
     twoCol('VAT EXEMPT SALES', money(birSummary.vatExemptSales)),
@@ -500,8 +590,6 @@ function createActualInvoicePrintText(invoice, options = {}) {
     twoCol('TOTAL SALES', money(birSummary.totalSales)),
     '',
     twoCol('Read by', p.meterReaderName || options.readerName || ''),
-    twoCol('Due Date', p.dueDate || firstValue(reading, ['Sched_DueDate'])),
-    twoCol('Disc Date', p.disconnectionDate || firstValue(reading, ['Sched_DisconnectionDate'])),
     ...invoiceFooterRows(invoice, options),
     '\n\n'
   );
@@ -546,19 +634,7 @@ function createInvoicePrintText(invoice, options = {}) {
 
   rows.push(SEP);
   rows.push(largeBoldText(center('UNBUNDLED RATES')));
-  rows.push(...sectionRows('Generation and Transmission Charges', [
-    ...(invoice.breakdown?.generation || []),
-    ...(invoice.breakdown?.systemLoss || []),
-    ...(invoice.breakdown?.transmission || []),
-  ]));
-  rows.push(...sectionRows('Distribution Revenues', invoice.breakdown?.distribution || []));
-  rows.push(...sectionRows('Others', [
-    ...(invoice.breakdown?.universal || []),
-    ...(invoice.breakdown?.otherCharges || []),
-    { field: 'Lifeline Subs./Disc.', rate: '', amount: p.lifelineDiscount },
-    { field: 'Senior Citizen Disc.', rate: '', amount: p.seniorDiscount },
-  ]));
-  rows.push(...sectionRows('Government Revenues', invoice.breakdown?.vat || []));
+  rows.push(...newFormatComputedRows(invoice));
 
   if (p.netMeteringExportCredit) rows.push(line('Outgoing Gen Credit', `P${money(p.netMeteringExportCredit)}`));
   if (p.previousMonthCredit) rows.push(line('Previous Month Credit', `P${money(p.previousMonthCredit)}`));
@@ -566,18 +642,13 @@ function createInvoicePrintText(invoice, options = {}) {
 
   rows.push(
     DOUBLE_SEP,
-    line('Bill Amount :', `P${money(Number(p.totalBill || 0))}`),
-    line('Arrears Amt :', `P${money(p.arrearsTotal)}`),
-    p.arrearsBreakdown ? String(p.arrearsBreakdown).replace(/^,/, '') : '',
-    line('Total Bill  :', `P${money(Number(p.totalBill || 0) + Number(p.arrearsTotal || 0))}`),
+    ...invoiceSummaryRows(invoice, p.dueDate, p.disconnectionDate),
     '',
     line('VATABLE SALES:', `P${money(Number(p.totalBill || 0) - Number(p.vatSubtotal || 0))}`),
     line('VAT (12%):', `P${money(p.vatSubtotal)}`),
     line('TOTAL SALES:', `P${money(p.totalBill)}`),
     '',
     line('Read by', p.meterReaderName || options.readerName || ''),
-    line('Due Date', p.dueDate),
-    line('Disc Date', p.disconnectionDate),
     ...invoiceFooterRows(invoice, options),
     '\n\n'
   );

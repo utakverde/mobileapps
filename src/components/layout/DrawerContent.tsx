@@ -19,40 +19,18 @@ interface DrawerItem {
 
 const DRAWER_ITEMS: DrawerItem[] = [
   { label: 'Dashboard', icon: 'view-dashboard', route: '/(drawer)/dashboard' },
-  { label: 'Utility Hub', icon: 'view-grid-plus', route: '/(drawer)/utility-hub' },
-  { label: 'Consumers', icon: 'account-group', route: '/(drawer)/utility-consumer-management' },
-  { label: 'New Connection', icon: 'account-plus', route: '/(drawer)/utility-new-connection' },
-  { label: 'Rates & Schedules', icon: 'cash-lock', route: '/(drawer)/utility-rates-schedules' },
-  { label: 'Meter Reading', icon: 'gauge', route: '/(drawer)/utility-meter-reading' },
-  { label: 'Bill Creation', icon: 'file-document-edit', route: '/(drawer)/utility-bill-creation' },
-  { label: 'Bill Adjustment', icon: 'file-document-edit-outline', route: '/(drawer)/utility-bill-adjustment' },
-  { label: 'Utility Operations', icon: 'view-dashboard-edit', route: '/(drawer)/utility-operations' },
-  { label: 'Consumer Bills', icon: 'account-cash', route: '/(drawer)/utility-consumers' },
-  { label: 'Bill Correction', icon: 'file-document-edit', route: '/(drawer)/utility-bill-correction/first' },
-  { label: 'Collections', icon: 'cash-multiple', route: '/(drawer)/utility-collections' },
-  { label: 'Complaints', icon: 'alert-circle', route: '/(drawer)/utility-complaints' },
-  { label: 'Service Status', icon: 'flash-off', route: '/(drawer)/utility-service-status' },
-  { label: 'Financial Analysis', icon: 'chart-line', route: '/(drawer)/utility-financial-analysis' },
-  { label: 'System Map', icon: 'map-marker-radius', route: '/(drawer)/utility-system-map' },
-  { label: 'Accounting', icon: 'calculator', route: '/(drawer)/utility-accounting-integration' },
-  { label: 'Reconciliation', icon: 'scale-balance', route: '/(drawer)/utility-reconciliation' },
-  { label: 'Reconnection', icon: 'restore', route: '/(drawer)/utility-reconnection' },
-  { label: 'Lifeline/Senior', icon: 'hand-heart', route: '/(drawer)/utility-lifeline-senior' },
-  { label: 'Net Metering', icon: 'solar-power', route: '/(drawer)/utility-net-metering', modes: ['net_metering'] },
-  { label: 'Audit Trail', icon: 'clipboard-text-clock', route: '/(drawer)/utility-audit-trail' },
   { label: 'Reports', icon: 'chart-bar', route: '/(drawer)/reports' },
   { label: 'Search', icon: 'magnify', route: '/(drawer)/search' },
-  { label: 'Net Metering', icon: 'solar-power', route: '/(drawer)/net-metering/first', modes: ['net_metering'] },
+  { label: 'Net Metering', icon: 'solar-power', route: '/(drawer)/utility-net-metering', modes: ['net_metering'] },
+  { label: 'Disconnection', icon: 'flash-off', route: '/(drawer)/disconnection', modes: ['disconnection'] },
   { label: 'GPS Map', icon: 'map-marker-radius', route: '/(drawer)/map/all' },
   { label: 'Complaints', icon: 'alert-circle', route: '/(drawer)/complaint/new', badge: 2 },
-  { label: 'Disconnection', icon: 'flash-off', route: '/(drawer)/disconnection', modes: ['disconnection'] },
   { label: 'Bluetooth Printer', icon: 'printer-wireless', route: '/(drawer)/bluetooth' },
 ];
 
 const SYSTEM_ITEMS: DrawerItem[] = [
   { label: 'Import/Export SQLite', icon: 'database-import', route: '/(drawer)/sqlite' },
   { label: 'Online Sync', icon: 'cloud-sync', route: '/(drawer)/sync', badge: 6 },
-  { label: 'SMS Center', icon: 'message-text', route: '/(drawer)/sms' },
   { label: 'Settings', icon: 'cog', route: '/(drawer)/settings' },
 ];
 

@@ -418,6 +418,8 @@ function computeInvoice(readingRecord, newPresentReading, options = {}) {
   const referenceNumber =
     readingRecord[config.billNumberField] ||
     `${readingRecord[config.accountNumberField] || 'INV'}-${readingRecord[config.billMonthField] || Date.now()}`;
+  const flagSurcharge = isActiveFlag(readingRecord.flag_surcharge);
+  const surchargeAmount = flagSurcharge ? Math.max(0, toNumber(readingRecord.surcharge_amount)) : 0;
 
   return {
     computedKwh,
@@ -445,6 +447,8 @@ function computeInvoice(readingRecord, newPresentReading, options = {}) {
     seniorDiscount,
     totalBeforeDiscount,
     totalBill,
+    flagSurcharge,
+    surchargeAmount,
     warnings,
     readingValidation,
     breakdown: {
@@ -486,6 +490,9 @@ function computeInvoice(readingRecord, newPresentReading, options = {}) {
       seniorDiscount,
       totalBeforeDiscount,
       totalBill,
+      flagSurcharge,
+      surchargeAmount,
+      latePaymentCharge: surchargeAmount,
       dueDate: readingRecord[config.dueDateField],
       disconnectionDate: readingRecord[config.disconnectionDateField],
       meterReaderName: readingRecord[config.meterReaderField] || '',

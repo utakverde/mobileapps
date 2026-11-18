@@ -39,6 +39,10 @@ assets/database/database.db
 *.db-wal
 *.db-shm
 /Database/
+!/database/
+/database/*
+!/database/*.js
+/artifacts/*.db
 /Backup/
 /Import/
 /Photos/

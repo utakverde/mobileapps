@@ -43,6 +43,17 @@ test('normal residential consumer includes desktop lifeline collection', () => {
   assert.equal(invoice.seniorDiscount, 0);
 });
 
+test('database surcharge flag gates the after-due charge without changing current bill', () => {
+  const disabled = computeInvoice(baseRecord({ flag_surcharge: 0, surcharge_amount: 100 }), 1120);
+  const enabled = computeInvoice(baseRecord({ flag_surcharge: 1, surcharge_amount: 100 }), 1120);
+
+  assert.equal(disabled.surchargeAmount, 0);
+  assert.equal(disabled.printableInvoice.latePaymentCharge, 0);
+  assert.equal(enabled.surchargeAmount, 100);
+  assert.equal(enabled.printableInvoice.latePaymentCharge, 100);
+  assert.equal(enabled.totalBill, disabled.totalBill);
+});
+
 test('ancillary rate is calculated per billable kWh and included in the bill subtotal', () => {
   const invoice = computeInvoice(baseRecord({ Rate_Ancillary: 1.5 }), 1120);
   assert.equal(invoice.ancillarySubtotal, 180);
