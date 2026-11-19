@@ -54,6 +54,18 @@ test('database surcharge flag gates the after-due charge without changing curren
   assert.equal(enabled.totalBill, disabled.totalBill);
 });
 
+test('canonical disconnection date takes precedence over the legacy scheduled date', () => {
+  const invoice = computeInvoice(
+    baseRecord({
+      disconnection_date: '2026-12-10',
+      Sched_DisconnectionDate: '2026-12-09',
+    }),
+    1120
+  );
+
+  assert.equal(invoice.printableInvoice.disconnectionDate, '2026-12-10');
+});
+
 test('ancillary rate is calculated per billable kWh and included in the bill subtotal', () => {
   const invoice = computeInvoice(baseRecord({ Rate_Ancillary: 1.5 }), 1120);
   assert.equal(invoice.ancillarySubtotal, 180);

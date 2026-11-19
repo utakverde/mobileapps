@@ -494,7 +494,11 @@ function computeInvoice(readingRecord, newPresentReading, options = {}) {
       surchargeAmount,
       latePaymentCharge: surchargeAmount,
       dueDate: readingRecord[config.dueDateField],
-      disconnectionDate: readingRecord[config.disconnectionDateField],
+      disconnectionDate:
+        readingRecord.disconnection_date ||
+        readingRecord[config.disconnectionDateField] ||
+        readingRecord.DiscoDate ||
+        '',
       meterReaderName: readingRecord[config.meterReaderField] || '',
       officialReceiptNo: readingRecord[config.officialReceiptField] || '',
       isLifeline: lifelineEligible || getFlag(readingRecord, [config.lifelineFlagField, 'flag_lifeline', 'flaglifeline', 'flagLifeline']),

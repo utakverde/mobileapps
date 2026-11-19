@@ -138,7 +138,9 @@ export default function ReadingScreen() {
         penalty: 0,
         totalDue: Number(readingRecord.total_bill ?? 0),
         dueDate: String(readingRecord.Sched_DueDate ?? ''),
-        disconnectionDate: String(readingRecord.Sched_DisconnectionDate ?? ''),
+        disconnectionDate: String(
+          readingRecord.disconnection_date ?? readingRecord.Sched_DisconnectionDate ?? readingRecord.DiscoDate ?? ''
+        ),
         bookNumber: String(readingRecord.Book ?? ''),
         areaCode: String(readingRecord.Area ?? ''),
         billMonth: String(readingRecord.BillMonth ?? ''),

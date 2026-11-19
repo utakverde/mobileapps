@@ -12,6 +12,7 @@ const APP_READING_COLUMNS = [
   ['net_metering_previous_credit', 'REAL DEFAULT 0'],
   ['flag_surcharge', 'INTEGER NOT NULL DEFAULT 0 CHECK(flag_surcharge IN (0,1))'],
   ['surcharge_amount', 'REAL NOT NULL DEFAULT 0'],
+  ['disconnection_date', 'TEXT'],
   ['meter_photo', 'TEXT'],
   ['house_photo', 'TEXT'],
   ['invoice_status', "TEXT DEFAULT 'pending'"],
@@ -50,7 +51,7 @@ function buildInvoiceUpsertParams(id, readingRecord, invoice, printable, ts) {
     invoice.totalBeforeDiscount,
     invoice.totalBill,
     printable.dueDate || readingRecord.Sched_DueDate,
-    printable.disconnectionDate || readingRecord.Sched_DisconnectionDate,
+    printable.disconnectionDate || readingRecord.disconnection_date || readingRecord.Sched_DisconnectionDate || readingRecord.DiscoDate,
     readingRecord.flag_paid || 0,
     printable.officialReceiptNo || readingRecord.ornumber || '',
     0,
@@ -85,6 +86,17 @@ async function ensureColumn(db, tableName, name, type) {
   if (!(await tableExists(db, tableName))) return;
   const columns = await tableColumns(db, tableName);
   if (!columns.includes(name)) await db.execAsync(`ALTER TABLE ${q(tableName)} ADD COLUMN ${q(name)} ${type}`);
+}
+
+async function ensureDisconnectionDateColumn(db, tableName, legacyColumn) {
+  if (!(await tableExists(db, tableName))) return;
+  await ensureColumn(db, tableName, 'disconnection_date', 'TEXT');
+  const columns = await tableColumns(db, tableName);
+  if (!columns.includes(legacyColumn)) return;
+  await db.execAsync(`UPDATE ${q(tableName)}
+    SET ${q('disconnection_date')} = ${q(legacyColumn)}
+    WHERE NULLIF(TRIM(${q('disconnection_date')}), '') IS NULL
+      AND NULLIF(TRIM(${q(legacyColumn)}), '') IS NOT NULL`);
 }
 
 function hasColumn(columns, column) {
@@ -212,6 +224,9 @@ async function ensureInvoiceSchema(db) {
   await ensureColumn(db, 'billhistory', 'surcharge_amount', 'REAL NOT NULL DEFAULT 0');
   await ensureColumn(db, 'billhistory_disco', 'flag_surcharge', 'INTEGER NOT NULL DEFAULT 0 CHECK(flag_surcharge IN (0,1))');
   await ensureColumn(db, 'billhistory_disco', 'surcharge_amount', 'REAL NOT NULL DEFAULT 0');
+  await ensureDisconnectionDateColumn(db, 'reading', 'Sched_DisconnectionDate');
+  await ensureDisconnectionDateColumn(db, 'billhistory', 'DiscoDate');
+  await ensureDisconnectionDateColumn(db, 'billhistory_disco', 'DiscoDate');
 
   const columns = await tableColumns(db, 'reading');
   for (const [name, type] of APP_READING_COLUMNS) {
@@ -356,7 +371,8 @@ function mapBillHistoryRow(readingRecord, invoice, id) {
     date_paid: readingRecord.date_paid,
     collector_code: readingRecord.collector_code || invoice.collectorCode || '',
     schedrdingid: readingRecord.Sched_ID,
-    DiscoDate: readingRecord.Sched_DisconnectionDate,
+    DiscoDate: readingRecord.disconnection_date || readingRecord.Sched_DisconnectionDate || readingRecord.DiscoDate,
+    disconnection_date: readingRecord.disconnection_date || readingRecord.Sched_DisconnectionDate || readingRecord.DiscoDate,
     high_low: '0',
     Read_Time: new Date().toLocaleString(),
     tries_count: readingRecord.tries_count || 0,
@@ -745,7 +761,7 @@ async function billHistoryToInvoice(db, row, readingRecord = null, options = {})
         ? Math.max(0, toNumber(row.surcharge_amount ?? record.surcharge_amount))
         : 0,
       dueDate: record.Sched_DueDate,
-      disconnectionDate: row.DiscoDate || record.Sched_DisconnectionDate,
+      disconnectionDate: row.disconnection_date || record.disconnection_date || row.DiscoDate || record.Sched_DisconnectionDate,
       meterReaderName,
       officialReceiptNo,
       isPaid,
@@ -801,6 +817,7 @@ async function saveInvoice(db, readingRecord, invoice, options = {}) {
       net_metering_previous_credit = ?,
       flag_surcharge = ?,
       surcharge_amount = ?,
+      disconnection_date = ?,
       invoice_status = ?,
       is_synced = 0,
       flag_read = '1',
@@ -819,6 +836,7 @@ async function saveInvoice(db, readingRecord, invoice, options = {}) {
       invoice.netMeteringPreviousCredit || 0,
       printable.flagSurcharge ? 1 : 0,
       printable.flagSurcharge ? Math.max(0, toNumber(printable.surchargeAmount)) : 0,
+      printable.disconnectionDate || readingRecord.disconnection_date || readingRecord.Sched_DisconnectionDate || readingRecord.DiscoDate || '',
       'created',
       ts,
       keyValue,

@@ -435,6 +435,7 @@ function invoiceSummaryRows(invoice, dueDate, disconnectionDate) {
     SEP,
     largeBoldText(flexibleCol('TOTAL AMOUNT DUE', `Php ${money(summary.amountDue)}`)),
     flexibleCol('LATE PAYMENT CHARGE AFTER DUE DATE:', money(summary.latePaymentCharge)),
+    center('ERC Resolution No. 30, series of 2026'),
     largeBoldText(flexibleCol('TOTAL AMOUNT AFTER DUE DATE', `Php ${money(summary.amountAfterDueDate)}`)),
     flexibleCol('DUE DATE (Current billing)', dueDate || ''),
     flexibleCol('DISCO DATE (Current billing)', disconnectionDate || ''),
@@ -580,7 +581,7 @@ function createActualInvoicePrintText(invoice, options = {}) {
     ...invoiceSummaryRows(
       invoice,
       p.dueDate || firstValue(reading, ['Sched_DueDate']),
-      p.disconnectionDate || firstValue(reading, ['Sched_DisconnectionDate'])
+      p.disconnectionDate || firstValue(reading, ['disconnection_date', 'DiscoDate', 'Sched_DisconnectionDate'])
     ),
     '',
     twoCol('VATABLE SALES', money(birSummary.vatableSales)),

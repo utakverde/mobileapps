@@ -192,7 +192,7 @@ function mapReadingToConsumer(record) {
     penalty: Math.max(0, arrears),
     totalDue: currentBill + Math.max(0, arrears),
     dueDate: String(firstValue(record, ['Sched_DueDate', 'DueDate'], '')),
-    disconnectionDate: String(firstValue(record, ['Sched_DisconnectionDate', 'DiscoDate'], '')),
+    disconnectionDate: String(firstValue(record, ['disconnection_date', 'Sched_DisconnectionDate', 'DiscoDate'], '')),
     status: statusFor(record),
     gpsLat: gps.lat,
     gpsLng: gps.lng,
@@ -271,7 +271,7 @@ async function getReadingAssignment(db, options = {}) {
     prevReadingDate: String(firstValue(first, ['Sched_PrevRdngDate', 'PreviousReadingDate'], '')),
     presentReadingDate: String(firstValue(first, ['Sched_PresRdngDate', 'PresentReadingDate'], '')),
     dueDate: String(firstValue(first, ['Sched_DueDate', 'DueDate'], '')),
-    disconnectionDate: String(firstValue(first, ['Sched_DisconnectionDate', 'DiscoDate'], '')),
+    disconnectionDate: String(firstValue(first, ['disconnection_date', 'Sched_DisconnectionDate', 'DiscoDate'], '')),
   };
 }
 
